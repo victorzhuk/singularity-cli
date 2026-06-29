@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "project-1",
+      "name": "Alpha",
+      "description": "Alpha project",
+      "createdAt": "2026-06-29T10:00:00Z"
+    },
+    {
+      "id": "project-2",
+      "name": "Beta",
+      "description": "Beta project",
+      "createdAt": "2026-06-29T11:00:00Z"
+    }
+  ],
+  "total": 2
+}

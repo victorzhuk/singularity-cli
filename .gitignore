@@ -11,3 +11,5 @@ dist
 
 .spego-test-*
 coverage
+
+upstream/extracted/

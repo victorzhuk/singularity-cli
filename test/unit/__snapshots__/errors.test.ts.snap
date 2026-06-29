@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`redaction > does not leak a fake token (snapshot) 1`] = `
+{
+  "details": {
+    "token": "[REDACTED]",
+  },
+  "error": "request failed with [REDACTED]",
+}
+`;

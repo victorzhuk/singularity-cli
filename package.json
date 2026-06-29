@@ -1,0 +1,35 @@
+{
+  "name": "@victorzhuk/singularity-cli",
+  "version": "0.1.0",
+  "description": "CLI for the Singularity API",
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "commonjs",
+  "bin": {
+    "singularity": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src test",
+    "test": "vitest run",
+    "upstream:verify": "node dist/cli.js upstream verify",
+    "upstream:check": "node dist/cli.js upstream check",
+    "upstream:upgrade": "node dist/cli.js upstream upgrade",
+    "test:adapter": "vitest run test/contract"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "extract-zip": "^2.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.0.1",
+    "eslint": "^10.6.0",
+    "nock": "^14.0.16",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^4.1.9"
+  }
+}

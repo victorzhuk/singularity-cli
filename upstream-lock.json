@@ -1,0 +1,168 @@
+{
+  "adapterMap": {
+    "getProject": {
+      "method": "getProject",
+      "source": "ApiClient"
+    },
+    "getTask": {
+      "method": "getTask",
+      "source": "ApiClient"
+    },
+    "listProjects": {
+      "method": "listProjects",
+      "source": "ApiClient"
+    },
+    "listTasks": {
+      "method": "listTasks",
+      "source": "ApiClient"
+    }
+  },
+  "discoveredModules": {
+    "client": {
+      "functions": [
+        "cleanParams",
+        "createChecklistItem",
+        "createHabit",
+        "createHabitDailyProgress",
+        "createKanbanStatus",
+        "createKanbanTaskStatus",
+        "createNote",
+        "createProject",
+        "createRequestConfig",
+        "createTag",
+        "createTask",
+        "createTaskGroup",
+        "createTimeStat",
+        "deleteBulkTimeStats",
+        "deleteChecklistItem",
+        "deleteHabit",
+        "deleteHabitDailyProgress",
+        "deleteKanbanStatus",
+        "deleteKanbanTaskStatus",
+        "deleteNote",
+        "deleteProject",
+        "deleteTag",
+        "deleteTask",
+        "deleteTaskGroup",
+        "deleteTimeStat",
+        "getChecklistItem",
+        "getHabit",
+        "getHabitDailyProgress",
+        "getKanbanStatus",
+        "getKanbanTaskStatus",
+        "getNote",
+        "getProject",
+        "getTag",
+        "getTask",
+        "getTaskGroup",
+        "getTimeStat",
+        "listChecklistItems",
+        "listHabitDailyProgress",
+        "listHabits",
+        "listKanbanStatuses",
+        "listKanbanTaskStatuses",
+        "listNotes",
+        "listProjects",
+        "listTags",
+        "listTaskGroups",
+        "listTasks",
+        "listTimeStats",
+        "logMessage",
+        "sanitizeHeaders",
+        "setAccessToken",
+        "setLogging",
+        "setLogLevel",
+        "setupLoggingInterceptors",
+        "updateChecklistItem",
+        "updateHabit",
+        "updateHabitDailyProgress",
+        "updateKanbanStatus",
+        "updateKanbanTaskStatus",
+        "updateNote",
+        "updateProject",
+        "updateTag",
+        "updateTask",
+        "updateTaskGroup",
+        "updateTimeStat"
+      ]
+    },
+    "modules": {
+      "checklist-item": {
+        "functions": [
+          "registerChecklistItemResources",
+          "registerChecklistItemTools"
+        ]
+      },
+      "habit": {
+        "functions": [
+          "registerHabitResources",
+          "registerHabitTools"
+        ]
+      },
+      "habit-progress": {
+        "functions": [
+          "registerHabitProgressResources",
+          "registerHabitProgressTools"
+        ]
+      },
+      "kanban-status": {
+        "functions": [
+          "registerKanbanStatusResources",
+          "registerKanbanStatusTools"
+        ]
+      },
+      "kanban-task-status": {
+        "functions": [
+          "registerKanbanTaskStatusResources",
+          "registerKanbanTaskStatusTools"
+        ]
+      },
+      "note": {
+        "functions": [
+          "registerNoteResources",
+          "registerNoteTools"
+        ]
+      },
+      "project": {
+        "functions": [
+          "registerProjectResources",
+          "registerProjectTools"
+        ]
+      },
+      "tag": {
+        "functions": [
+          "registerTagResources",
+          "registerTagTools"
+        ]
+      },
+      "task": {
+        "functions": [
+          "registerTaskResources",
+          "registerTaskTools"
+        ]
+      },
+      "task-group": {
+        "functions": [
+          "registerTaskGroupResources",
+          "registerTaskGroupTools"
+        ]
+      },
+      "time-stat": {
+        "functions": [
+          "registerTimeStatResources",
+          "registerTimeStatTools"
+        ]
+      }
+    }
+  },
+  "downloadedAt": "2026-06-29T18:17:04.326Z",
+  "requiredFiles": [
+    "client.js",
+    "server.js",
+    "modules/",
+    "utils/"
+  ],
+  "sha256": "adc127b3ac093073dda150f6bc6e4dac401df1836c8ca4b4e0455ed0ce93210d",
+  "sourceUrl": "https://me.singularity-app.com/download/singularity-mcp-server-2.1.1.mcpb",
+  "version": "2.1.1"
+}

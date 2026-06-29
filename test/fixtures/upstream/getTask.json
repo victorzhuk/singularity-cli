@@ -1,0 +1,9 @@
+{
+  "id": "task-1",
+  "title": "First task",
+  "description": "A sample task for contract testing",
+  "status": "open",
+  "projectId": "project-1",
+  "createdAt": "2026-06-29T12:00:00Z",
+  "updatedAt": "2026-06-29T12:00:00Z"
+}
