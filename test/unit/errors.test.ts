@@ -3,9 +3,12 @@ import {
   AdapterUnavailableError,
   CliError,
   formatErrorEnvelope,
+  InternalError,
   NetworkTimeoutError,
+  NotImplementedError,
   UpstreamBreakingChangeError,
   UpstreamSchemaMismatchError,
+  UsageError,
 } from '../../src/core/errors.js';
 import { redact, registerSecret } from '../../src/core/redact.js';
 
@@ -67,6 +70,9 @@ describe('error codes', () => {
       'UPSTREAM_SCHEMA_MISMATCH',
     );
     expect(new NetworkTimeoutError(1).code).toBe('NETWORK_TIMEOUT');
+    expect(new UsageError('x').code).toBe('USAGE_ERROR');
+    expect(new InternalError('x').code).toBe('INTERNAL_ERROR');
+    expect(new NotImplementedError('x').code).toBe('NOT_IMPLEMENTED');
   });
 });
 
