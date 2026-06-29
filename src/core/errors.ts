@@ -2,7 +2,10 @@ export type ErrorCode =
   | 'ADAPTER_UNAVAILABLE'
   | 'UPSTREAM_BREAKING_CHANGE'
   | 'UPSTREAM_SCHEMA_MISMATCH'
-  | 'NETWORK_TIMEOUT';
+  | 'NETWORK_TIMEOUT'
+  | 'USAGE_ERROR'
+  | 'INTERNAL_ERROR'
+  | 'NOT_IMPLEMENTED';
 
 export interface ErrorEnvelope {
   error: {
@@ -47,6 +50,24 @@ export class NetworkTimeoutError extends CliError {
       ...details,
       timeoutMs,
     });
+  }
+}
+
+export class UsageError extends CliError {
+  constructor(message: string, details?: Record<string, unknown>) {
+    super('USAGE_ERROR', message, details);
+  }
+}
+
+export class InternalError extends CliError {
+  constructor(message: string, details?: Record<string, unknown>) {
+    super('INTERNAL_ERROR', message, details);
+  }
+}
+
+export class NotImplementedError extends CliError {
+  constructor(command: string, details?: Record<string, unknown>) {
+    super('NOT_IMPLEMENTED', `${command} is not implemented`, { command, ...details });
   }
 }
 
