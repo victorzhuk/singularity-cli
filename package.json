@@ -20,7 +20,7 @@
     "upstream:upgrade": "node dist/cli.js upstream upgrade",
     "test:adapter": "vitest run test/contract",
     "pack:check": "npm pack --dry-run --json",
-    "validate": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:adapter && openspec validate harden-code-architecture-quality --strict && openspec validate --all --strict --no-interactive && npm run pack:check"
+    "validate": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:adapter && openspec validate --all --strict --no-interactive && npm run pack:check"
   },
   "files": [
     "dist",
