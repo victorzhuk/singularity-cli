@@ -1,14 +1,19 @@
-import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { AdapterUnavailableError } from '../../core/errors.js';
-import { registerSecret } from '../../core/redact.js';
-import { extractArchive } from '../../upstream/extract.js';
-import { archivePath, extractedDir } from '../../upstream/paths.js';
+import {
+  AdapterUnavailableError,
+  CliError,
+  NetworkTimeoutError,
+} from '../../core/errors.js';
+import { redact, registerSecret } from '../../core/redact.js';
+import { loadUpstreamRuntime } from '../../upstream/runtime.js';
+
+const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 
 export interface SingularityAdapterConfig {
   baseUrl: string;
   accessToken: string;
   enableLogging?: boolean;
+  requestTimeoutMs?: number;
 }
 
 export interface SingularityAdapter {
@@ -31,16 +36,123 @@ type ApiClientConstructor = new (config: {
   enableLogging: boolean;
 }) => ApiClientInstance;
 
-function loadApiClient(extractedDirPath: string): unknown {
-  const clientPath = path.join(extractedDirPath, 'client.js');
+function loadApiClient(runtimePath: string): unknown {
+  const clientPath = path.join(runtimePath, 'client.js');
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const clientModule = require(clientPath);
   return clientModule.ApiClient;
 }
 
+function timeoutPromise<T>(
+  operation: string,
+  timeoutMs: number,
+): Promise<T> {
+  return new Promise((_resolve, reject) => {
+    setTimeout(() => {
+      reject(new NetworkTimeoutError(timeoutMs, { operation }));
+    }, timeoutMs);
+  });
+}
+
+async function safeMessage(err: unknown): Promise<string> {
+  if (err instanceof Error) {
+    return String(redact(err.message));
+  }
+  return String(redact(err));
+}
+
+function safeStatus(err: unknown): number | undefined {
+  if (err === null || typeof err !== 'object') {
+    return undefined;
+  }
+
+  const e = err as Record<string, unknown>;
+  if (typeof e.status === 'number') {
+    return e.status;
+  }
+
+  if (e.response !== null && typeof e.response === 'object') {
+    const response = e.response as Record<string, unknown>;
+    if (typeof response.status === 'number') {
+      return response.status;
+    }
+  }
+
+  return undefined;
+}
+
+function safeUpstreamMessage(err: unknown): string | undefined {
+  if (err === null || typeof err !== 'object') {
+    return undefined;
+  }
+
+  const e = err as Record<string, unknown>;
+
+  if (e.response !== null && typeof e.response === 'object') {
+    const response = e.response as Record<string, unknown>;
+    if (response.data !== null && typeof response.data === 'object') {
+      const data = response.data as Record<string, unknown>;
+      if (typeof data.message === 'string' && data.message.trim().length > 0) {
+        return String(redact(data.message));
+      }
+      if (typeof data.error === 'string' && data.error.trim().length > 0) {
+        return String(redact(data.error));
+      }
+    }
+  }
+
+  if (typeof e.message === 'string' && e.message.trim().length > 0) {
+    return String(redact(e.message));
+  }
+
+  return undefined;
+}
+
+function normalizeAdapterError(
+  err: unknown,
+  operation: string,
+): AdapterUnavailableError {
+  if (err instanceof CliError) {
+    return err as AdapterUnavailableError;
+  }
+
+  const message = safeMessage(err);
+  const details: Record<string, unknown> = { operation };
+  const status = safeStatus(err);
+  if (status !== undefined) {
+    details.status = status;
+  }
+  const upstreamMessage = safeUpstreamMessage(err);
+  if (upstreamMessage !== undefined) {
+    details.message = upstreamMessage;
+  }
+
+  return new AdapterUnavailableError(
+    `${operation} failed: ${message}`,
+    redact(details) as Record<string, unknown>,
+  );
+}
+
+async function callWithTimeout<T>(
+  operation: string,
+  timeoutMs: number,
+  fn: () => Promise<T>,
+): Promise<T> {
+  if (timeoutMs <= 0) {
+    return fn();
+  }
+
+  try {
+    return await Promise.race([fn(), timeoutPromise<T>(operation, timeoutMs)]);
+  } catch (err) {
+    throw normalizeAdapterError(err, operation);
+  }
+}
+
 export function createSingularityAdapter(
   config: SingularityAdapterConfig,
 ): SingularityAdapter {
+  const timeoutMs = config.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
   let apiClient: ApiClientInstance | null = null;
 
   async function ensureLoaded(): Promise<ApiClientInstance> {
@@ -48,11 +160,8 @@ export function createSingularityAdapter(
       return apiClient;
     }
 
-    if (!existsSync(extractedDir)) {
-      await extractArchive(archivePath, extractedDir);
-    }
-
-    const ApiClient = loadApiClient(extractedDir);
+    const { runtimePath } = await loadUpstreamRuntime();
+    const ApiClient = loadApiClient(runtimePath);
     if (typeof ApiClient !== 'function') {
       throw new AdapterUnavailableError('official ApiClient is not callable', {
         path: 'client.js',
@@ -82,11 +191,21 @@ export function createSingularityAdapter(
     return apiClient;
   }
 
+  async function call<T>(
+    operation: string,
+    fn: () => Promise<T>,
+  ): Promise<T> {
+    await ensureLoaded();
+    return callWithTimeout(operation, timeoutMs, fn);
+  }
+
   return {
-    listTasks: async (params) => (await ensureLoaded()).listTasks(params),
-    getTask: async (id) => (await ensureLoaded()).getTask(id),
+    listTasks: async (params) =>
+      call('listTasks', () => apiClient!.listTasks(params)),
+    getTask: async (id) => call('getTask', () => apiClient!.getTask(id)),
     listProjects: async (params) =>
-      (await ensureLoaded()).listProjects(params),
-    getProject: async (id) => (await ensureLoaded()).getProject(id),
+      call('listProjects', () => apiClient!.listProjects(params)),
+    getProject: async (id) =>
+      call('getProject', () => apiClient!.getProject(id)),
   };
 }

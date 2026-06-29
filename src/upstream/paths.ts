@@ -7,5 +7,4 @@ export const archivePath = path.join(
   upstreamDir,
   'singularity-mcp-server-2.1.1.mcpb',
 );
-export const extractedDir = path.join(upstreamDir, 'extracted');
 export const lockfilePath = path.join(repoRoot, 'upstream-lock.json');

@@ -12,13 +12,21 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src test",
+    "lint": "eslint src test scripts eslint.config.mjs",
+    "pretest": "npm run build",
     "test": "vitest run",
     "upstream:verify": "node dist/cli.js upstream verify",
     "upstream:check": "node dist/cli.js upstream check",
     "upstream:upgrade": "node dist/cli.js upstream upgrade",
-    "test:adapter": "vitest run test/contract"
+    "test:adapter": "vitest run test/contract",
+    "pack:check": "npm pack --dry-run --json",
+    "validate": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:adapter && openspec validate harden-code-architecture-quality --strict && openspec validate --all --strict --no-interactive && npm run pack:check"
   },
+  "files": [
+    "dist",
+    "upstream/*.mcpb",
+    "upstream-lock.json"
+  ],
   "dependencies": {
     "commander": "^15.0.0",
     "extract-zip": "^2.0.1"

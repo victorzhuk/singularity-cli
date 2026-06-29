@@ -1,5 +1,4 @@
 const { existsSync, rmSync } = require('node:fs');
-const { tmpdir } = require('node:os');
 const { archivePath, lockfilePath } = require('../dist/upstream/paths.js');
 const { sha256File } = require('../dist/upstream/hash.js');
 const { extractAndDiscover } = require('../dist/upstream/runtime.js');

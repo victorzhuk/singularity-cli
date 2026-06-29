@@ -5,10 +5,7 @@ import { describe, expect, it } from 'vitest';
 describe('adapter boundary', () => {
   it('allows only paths.ts and adapter.ts to mention upstream/extracted', async () => {
     const files = globSync('src/**/*.ts');
-    const allowed = new Set([
-      'src/upstream/paths.ts',
-      'src/adapters/singularity/adapter.ts',
-    ]);
+    const allowed = new Set<string>([]);
 
     const offenders: string[] = [];
     for (const file of files) {

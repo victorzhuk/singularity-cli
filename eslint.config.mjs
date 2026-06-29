@@ -13,6 +13,24 @@ export default tseslint.config(
     ],
   },
   {
+    files: ['scripts/**/*.js', 'eslint.config.mjs'],
+    languageOptions: {
+      globals: {
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        console: 'readonly',
+        exports: 'readonly',
+        module: 'readonly',
+        process: 'readonly',
+        require: 'readonly',
+        setTimeout: 'readonly',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
     rules: {
       'no-restricted-imports': [
         'error',

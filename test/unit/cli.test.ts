@@ -10,6 +10,7 @@ const exec = promisify(execFile);
 const repoRoot = process.cwd();
 const cliBin = path.join(repoRoot, 'dist', 'cli.js');
 const distDir = path.join(repoRoot, 'dist');
+const nodeModulesRoot = path.resolve(require.resolve('commander'), '..', '..');
 
 interface RunResult {
   stdout: string;
@@ -100,7 +101,7 @@ describe('cli error contract', () => {
         cwd: tempRoot,
         env: {
           ...process.env,
-          NODE_PATH: path.join(repoRoot, 'node_modules'),
+          NODE_PATH: nodeModulesRoot,
         },
       });
       expect(result.exitCode).not.toBe(0);

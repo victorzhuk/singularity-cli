@@ -8,14 +8,8 @@ const emptyExtractedDir = path.resolve(
 
 describe('singularity adapter unavailable', () => {
   beforeAll(async () => {
-    vi.doMock('../../src/upstream/paths.js', () => ({
-      extractedDir: emptyExtractedDir,
-      upstreamDir: path.resolve(process.cwd(), 'upstream'),
-      archivePath: path.resolve(
-        process.cwd(),
-        'upstream/singularity-mcp-server-2.1.1.mcpb',
-      ),
-      lockfilePath: path.resolve(process.cwd(), 'upstream-lock.json'),
+    vi.doMock('../../src/upstream/runtime.js', () => ({
+      loadUpstreamRuntime: async () => ({ runtimePath: emptyExtractedDir }),
     }));
   });
 
