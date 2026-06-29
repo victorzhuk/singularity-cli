@@ -1,16 +1,10 @@
-import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { discoverUpstream } from '../../src/upstream/discovery.js';
-import { archivePath, extractedDir } from '../../src/upstream/paths.js';
+import { extractedDir } from '../../src/upstream/paths.js';
 import { readLockfile } from '../../src/upstream/lockfile.js';
-import { extractArchive } from '../../src/upstream/extract.js';
 
 describe('upstream lockfile', () => {
   it('is byte-stable across discovery runs except for downloadedAt', async () => {
-    if (!existsSync(extractedDir)) {
-      await extractArchive(archivePath, extractedDir);
-    }
-
     const lock = await readLockfile();
     const discovery = await discoverUpstream(extractedDir, lock.sha256);
 
