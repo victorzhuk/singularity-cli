@@ -1,8 +1,5 @@
-# error-model Specification
+## MODIFIED Requirements
 
-## Purpose
-Define the CLI's normalized error envelope, stable foundation error codes, token redaction rules, and exit-code behavior so that every failure — parser errors, command failures, and unexpected internal errors — presents a consistent, safe interface in both human and JSON modes.
-## Requirements
 ### Requirement: Normalized error envelope
 
 The system SHALL represent all command failures with a normalized envelope shaped as `{ "error": { "code": string, "message": string, "details"?: object } }`. In `--json` mode this envelope SHALL be written to stderr only, and stdout SHALL contain no error output. This requirement applies to action failures, Commander parse failures, unknown commands, unknown options, and unexpected internal failures.
@@ -30,15 +27,6 @@ The system SHALL represent all command failures with a normalized envelope shape
 - **THEN** stderr contains a normalized envelope with code `USAGE_ERROR`
 - **AND** no raw Commander error text is printed outside the envelope
 
-### Requirement: Non-zero exit codes on failure
-
-The system SHALL exit with a non-zero status code for any failed operation and exit zero only on success.
-
-#### Scenario: Failure exits non-zero
-
-- **WHEN** a command fails for any reason
-- **THEN** the process exits with a non-zero status code
-
 ### Requirement: Foundation error codes
 
 The system SHALL define and use stable string error codes for the foundation layer, including at minimum `ADAPTER_UNAVAILABLE`, `UPSTREAM_BREAKING_CHANGE`, `UPSTREAM_SCHEMA_MISMATCH`, `NETWORK_TIMEOUT`, `USAGE_ERROR`, `INTERNAL_ERROR`, and `NOT_IMPLEMENTED`. `NETWORK_TIMEOUT` details SHALL include the timeout in milliseconds. Unknown internal failures SHALL use `INTERNAL_ERROR`, not an unrelated domain code.
@@ -65,19 +53,7 @@ The system SHALL define and use stable string error codes for the foundation lay
 - **THEN** it exits non-zero with code `NOT_IMPLEMENTED`
 - **AND** it does not print a success-style placeholder message
 
-### Requirement: Token redaction
-
-The system SHALL redact authentication tokens everywhere they could otherwise appear, including thrown errors, error envelopes, debug logs, and test snapshots. Tokens SHALL never be printed.
-
-#### Scenario: Token redacted in error details
-
-- **WHEN** an error is produced while a token is in scope
-- **THEN** the token value is replaced by a redaction marker in the message, details, and any logs
-
-#### Scenario: Debug logs redact tokens
-
-- **WHEN** debug logging is enabled and a request carrying a token is logged
-- **THEN** the logged output contains the redaction marker and not the token value
+## ADDED Requirements
 
 ### Requirement: Global JSON mode
 
@@ -97,4 +73,3 @@ The CLI SHALL expose `--json` as a global option that is parsed before command d
 
 - **WHEN** help output is requested without `--json`
 - **THEN** the CLI prints Commander help text in the human-readable format
-

@@ -1,8 +1,5 @@
-# upstream-mcpb-ingestion Specification
+## MODIFIED Requirements
 
-## Purpose
-Define how the CLI pins, verifies, and runs the official Singularity MCPB archive: SHA256 integrity checks, a deterministic lock file, a shared verified runtime loader, an external immutable cache keyed by version and SHA, atomic extraction with stale-cache recovery, and a read-only `upstream verify` command.
-## Requirements
 ### Requirement: Pinned MCPB source and integrity verification
 
 The system SHALL pin the official MCPB by source URL and SHA256, defaulting to `https://me.singularity-app.com/download/singularity-mcp-server-2.1.1.mcpb` at version `2.1.1`. The system SHALL verify the downloaded or vendored archive's SHA256 against the pinned value before extraction, discovery, adapter loading, or execution.
@@ -21,29 +18,6 @@ The system SHALL pin the official MCPB by source URL and SHA256, defaulting to `
 
 - **WHEN** the adapter needs an extracted MCPB runtime and no valid cache exists
 - **THEN** it verifies the archive SHA256 against the lock file before extracting or requiring MCPB files
-
-### Requirement: Archive extraction and required-file validation
-
-The system SHALL extract the MCPB as a zip-compatible archive and SHALL validate that required files and directories are present, including `client.js`, `server.js`, `modules/`, and `utils/`.
-
-#### Scenario: Required files present
-
-- **WHEN** an extracted MCPB contains all required files and directories
-- **THEN** validation passes and the discovered file map is recorded
-
-#### Scenario: Required file missing
-
-- **WHEN** an extracted MCPB is missing a required file or directory
-- **THEN** validation fails with a precise missing-file report identifying each absent path
-
-### Requirement: Module and function discovery
-
-The system SHALL discover the callable module and function surface exposed by the extracted MCPB (client and `modules/`) and SHALL record the discovered list for use by the adapter and lock file.
-
-#### Scenario: Discovery records callable surface
-
-- **WHEN** discovery runs against a valid extracted MCPB
-- **THEN** it produces a deterministic list of discovered modules and their exported functions
 
 ### Requirement: Upstream lock file
 
@@ -88,6 +62,8 @@ The system SHALL provide a `singularity upstream verify` command that runs struc
 - **WHEN** `singularity upstream verify` fails after creating a temporary extraction directory
 - **THEN** the temporary directory is removed before the process exits
 
+## ADDED Requirements
+
 ### Requirement: Shared verified upstream runtime
 
 The system SHALL expose one upstream runtime loader used by adapter loading, verification helpers, and maintainer bootstrap code. The loader SHALL validate the lock file, verify archive SHA256, extract archives, validate required files, discover callable modules, and return the extracted runtime path.
@@ -129,4 +105,3 @@ The runtime loader SHALL extract into a temporary directory, validate discovery,
 
 - **WHEN** two processes request the same runtime cache concurrently
 - **THEN** at most one completed cache directory is used and temporary directories are cleaned up
-
