@@ -1,17 +1,6 @@
-import { randomUUID } from 'node:crypto';
-import { rmSync } from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
 import { Command } from 'commander';
-import {
-  UpstreamBreakingChangeError,
-  UpstreamSchemaMismatchError,
-} from '../core/errors.js';
-import { extractArchive } from '../upstream/extract.js';
-import { sha256File } from '../upstream/hash.js';
-import { readLockfile } from '../upstream/lockfile.js';
-import { archivePath } from '../upstream/paths.js';
-import { discoverUpstream } from '../upstream/discovery.js';
+import { NotImplementedError } from '../core/errors.js';
+import { verifyUpstreamRuntime } from '../upstream/runtime.js';
 
 function sortKeys(value: unknown): unknown {
   if (Array.isArray(value)) {
@@ -34,11 +23,7 @@ function buildSortedModules(
 ): Record<string, { functions: string[] }> {
   const sorted: Record<string, { functions: string[] }> = {};
   for (const name of Object.keys(modules).sort((a, b) => a.localeCompare(b))) {
-    sorted[name] = {
-      functions: [...modules[name].functions].sort((a, b) =>
-        a.localeCompare(b),
-      ),
-    };
+    sorted[name] = { functions: [...modules[name].functions] };
   }
   return sorted;
 }
@@ -52,26 +37,10 @@ export function createUpstreamCommand(): Command {
     .description('verify the bundled MCPB archive against the lockfile')
     .option('--json', 'output JSON')
     .action(async (options: { json?: boolean }) => {
-      const lock = await readLockfile().catch(() => {
-        throw new UpstreamSchemaMismatchError('upstream-lock.json missing');
+      const { discovery } = await verifyUpstreamRuntime({
+        lockfilePath: process.env.SINGULARITY_UPSTREAM_LOCKFILE,
+        archivePath: process.env.SINGULARITY_UPSTREAM_ARCHIVE,
       });
-
-      const actualSha256 = await sha256File(archivePath);
-      if (actualSha256 !== lock.sha256) {
-        throw new UpstreamBreakingChangeError('sha256 mismatch', {
-          expected: lock.sha256,
-          actual: actualSha256,
-        });
-      }
-
-      const tempDir = path.join(
-        os.tmpdir(),
-        `singularity-upstream-verify-${randomUUID()}`,
-      );
-
-      await extractArchive(archivePath, tempDir);
-      const discovery = await discoverUpstream(tempDir, actualSha256);
-      rmSync(tempDir, { recursive: true, force: true });
 
       if (options.json) {
         const output = {
@@ -92,18 +61,18 @@ export function createUpstreamCommand(): Command {
   const check = new Command('check')
     .description('check for upstream updates')
     .action(() => {
-      console.log('not implemented in this change');
+      throw new NotImplementedError('upstream check');
     });
 
   const upgrade = new Command('upgrade')
     .description('upgrade the upstream bundle')
     .action(() => {
-      console.log('not implemented in this change');
+      throw new NotImplementedError('upstream upgrade');
     });
 
   upstream.addCommand(verify);
-  upstream.addCommand(check);
-  upstream.addCommand(upgrade);
+  upstream.addCommand(check, { hidden: true });
+  upstream.addCommand(upgrade, { hidden: true });
 
   return upstream;
 }

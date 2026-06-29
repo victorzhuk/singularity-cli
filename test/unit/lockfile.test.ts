@@ -1,25 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { discoverUpstream } from '../../src/upstream/discovery.js';
-import { extractedDir } from '../../src/upstream/paths.js';
+import { verifyUpstreamRuntime } from '../../src/upstream/runtime.js';
 import { readLockfile } from '../../src/upstream/lockfile.js';
 
 describe('upstream lockfile', () => {
   it('is byte-stable across discovery runs except for downloadedAt', async () => {
     const lock = await readLockfile();
-    const discovery = await discoverUpstream(extractedDir, lock.sha256);
+    const { discovery } = await verifyUpstreamRuntime();
 
-    const run1 = {
+    const fromLock = {
       version: lock.version,
-      sourceUrl: lock.sourceUrl,
       sha256: lock.sha256,
       requiredFiles: lock.requiredFiles,
       discoveredModules: lock.discoveredModules,
       adapterMap: lock.adapterMap,
     };
 
-    const run2 = {
+    const fromDiscovery = {
       version: discovery.version,
-      sourceUrl: lock.sourceUrl,
       sha256: discovery.sha256,
       requiredFiles: discovery.requiredFiles,
       discoveredModules: {
@@ -29,6 +26,6 @@ describe('upstream lockfile', () => {
       adapterMap: discovery.adapterMap,
     };
 
-    expect(run1).toEqual(run2);
+    expect(fromLock).toEqual(fromDiscovery);
   });
 });

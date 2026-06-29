@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process';
-import { rename } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { promisify } from 'node:util';
 import { archivePath } from '../../src/upstream/paths.js';
@@ -43,22 +44,23 @@ describe('upstream verify', () => {
   }, 15_000);
 
   it('fails JSON envelope when the lockfile is missing', async () => {
-    const lockPath = 'upstream-lock.json';
-    const backupPath = 'upstream-lock.json.bak';
-    await rename(lockPath, backupPath);
+    const env = {
+      ...process.env,
+      SINGULARITY_UPSTREAM_LOCKFILE: path.join(
+        tmpdir(),
+        'singularity-missing-lock.json',
+      ),
+    };
 
-    try {
-      await expect(
-        exec('node', ['dist/cli.js', 'upstream', 'verify', '--json'], {
-          cwd: process.cwd(),
-        }),
-      ).rejects.toMatchObject({
-        stdout: '',
-        stderr: expect.stringContaining('UPSTREAM_SCHEMA_MISMATCH'),
-      });
-    } finally {
-      await rename(backupPath, lockPath);
-    }
+    await expect(
+      exec('node', ['dist/cli.js', 'upstream', 'verify', '--json'], {
+        cwd: process.cwd(),
+        env,
+      }),
+    ).rejects.toMatchObject({
+      stdout: '',
+      stderr: expect.stringContaining('UPSTREAM_SCHEMA_MISMATCH'),
+    });
   });
 
   it('refers to the bundled archive', () => {

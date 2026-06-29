@@ -1,9 +1,10 @@
-const { existsSync } = require('node:fs');
-const { archivePath, extractedDir, lockfilePath } = require('../dist/upstream/paths.js');
+const { existsSync, rmSync } = require('node:fs');
+const { tmpdir } = require('node:os');
+const { archivePath, lockfilePath } = require('../dist/upstream/paths.js');
 const { sha256File } = require('../dist/upstream/hash.js');
-const { extractArchive } = require('../dist/upstream/extract.js');
-const { discoverUpstream } = require('../dist/upstream/discovery.js');
+const { extractAndDiscover } = require('../dist/upstream/runtime.js');
 const { writeLockfile } = require('../dist/upstream/lockfile.js');
+const { UpstreamSchemaMismatchError } = require('../dist/core/errors.js');
 
 const expectedSha256 =
   'adc127b3ac093073dda150f6bc6e4dac401df1836c8ca4b4e0455ed0ce93210d';
@@ -17,26 +18,29 @@ async function main() {
 
   const sha256 = await sha256File(archivePath);
   if (sha256 !== expectedSha256) {
-    throw new Error(
-      `upstream integrity mismatch: expected ${expectedSha256}, got ${sha256}`,
-    );
+    throw new UpstreamSchemaMismatchError('upstream archive sha256 mismatch', {
+      expected: expectedSha256,
+      actual: sha256,
+    });
   }
 
-  await extractArchive(archivePath, extractedDir);
-  const discovery = await discoverUpstream(extractedDir, sha256);
-
-  await writeLockfile({
-    version: discovery.version,
-    sourceUrl,
-    downloadedAt: new Date().toISOString(),
-    sha256,
-    requiredFiles: discovery.requiredFiles,
-    discoveredModules: {
-      client: discovery.client,
-      modules: discovery.modules,
-    },
-    adapterMap: discovery.adapterMap,
-  });
+  const { tempDir, discovery } = await extractAndDiscover(archivePath, sha256);
+  try {
+    await writeLockfile({
+      version: discovery.version,
+      sourceUrl,
+      downloadedAt: new Date().toISOString(),
+      sha256,
+      requiredFiles: discovery.requiredFiles,
+      discoveredModules: {
+        client: discovery.client,
+        modules: discovery.modules,
+      },
+      adapterMap: discovery.adapterMap,
+    });
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
 
   console.log(`bootstrapped upstream-lock.json: ${lockfilePath}`);
 }
