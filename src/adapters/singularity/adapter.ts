@@ -59,6 +59,37 @@ export interface UpdateProjectRequest {
   parentId?: string | null;
 }
 
+export interface CreateNoteRequest {
+  title?: string;
+  projectId?: string;
+  content?: unknown[];
+}
+
+export interface UpdateNoteRequest {
+  id: string;
+  title?: string;
+  projectId?: string;
+  content?: unknown[];
+}
+
+export interface CreateHabitRequest {
+  title: string;
+  color?: string;
+  status?: number;
+}
+
+export interface UpdateHabitRequest {
+  id: string;
+  title?: string;
+  color?: string;
+  status?: number;
+}
+
+export interface CompleteHabitRequest {
+  habitId: string;
+  date?: string;
+}
+
 export interface SingularityAdapterConfig {
   baseUrl: string;
   accessToken: string;
@@ -79,6 +110,18 @@ export interface SingularityAdapter {
   createProject(req: CreateProjectRequest): Promise<unknown>;
   updateProject(req: UpdateProjectRequest): Promise<unknown>;
   authStatus(): Promise<unknown>;
+  // P1
+  listNotes(params?: Record<string, unknown>): Promise<unknown>;
+  getNote(id: string): Promise<unknown>;
+  createNote(note: CreateNoteRequest): Promise<unknown>;
+  updateNote(note: UpdateNoteRequest): Promise<unknown>;
+  deleteNote(id: string): Promise<unknown>;
+  listHabits(params?: Record<string, unknown>): Promise<unknown>;
+  getHabit(id: string): Promise<unknown>;
+  createHabit(habit: CreateHabitRequest): Promise<unknown>;
+  updateHabit(habit: UpdateHabitRequest): Promise<unknown>;
+  deleteHabit(id: string): Promise<unknown>;
+  completeHabit(progress: CompleteHabitRequest): Promise<unknown>;
 }
 
 interface ApiClientInstance {
@@ -92,6 +135,18 @@ interface ApiClientInstance {
   deleteTask(id: string): Promise<unknown>;
   createProject(project: Record<string, unknown>): Promise<unknown>;
   updateProject(project: Record<string, unknown>): Promise<unknown>;
+  // P1 — availability checked per call, not in ensureLoaded
+  listNotes?(params?: Record<string, unknown>): Promise<unknown>;
+  getNote?(id: string): Promise<unknown>;
+  createNote?(note: Record<string, unknown>): Promise<unknown>;
+  updateNote?(note: Record<string, unknown>): Promise<unknown>;
+  deleteNote?(id: string): Promise<unknown>;
+  listHabits?(params?: Record<string, unknown>): Promise<unknown>;
+  getHabit?(id: string): Promise<unknown>;
+  createHabit?(habit: Record<string, unknown>): Promise<unknown>;
+  updateHabit?(habit: Record<string, unknown>): Promise<unknown>;
+  deleteHabit?(id: string): Promise<unknown>;
+  createHabitDailyProgress?(progress: Record<string, unknown>): Promise<unknown>;
 }
 
 type ApiClientConstructor = new (config: {
@@ -280,6 +335,18 @@ export function createSingularityAdapter(
     return callWithTimeout(operation, timeoutMs, fn);
   }
 
+  async function callP1<T>(
+    methodName: string,
+    operation: string,
+    fn: () => Promise<T>,
+  ): Promise<T> {
+    await ensureLoaded();
+    if (typeof (apiClient as unknown as Record<string, unknown>)[methodName] !== 'function') {
+      throw new AdapterUnavailableError('method not available', { method: methodName });
+    }
+    return callWithTimeout(operation, timeoutMs, fn);
+  }
+
   return {
     listTasks: async (params) =>
       call('listTasks', () => apiClient!.listTasks(params)),
@@ -304,5 +371,32 @@ export function createSingularityAdapter(
       call('updateProject', () => apiClient!.updateProject(req as unknown as Record<string, unknown>)),
     authStatus: async () =>
       call('authStatus', () => apiClient!.listProjects({ maxCount: 1 })),
+    listNotes: async (params) =>
+      callP1('listNotes', 'listNotes', () => apiClient!.listNotes!(params)),
+    getNote: async (id) =>
+      callP1('getNote', 'getNote', () => apiClient!.getNote!(id)),
+    createNote: async (note) =>
+      callP1('createNote', 'createNote', () =>
+        apiClient!.createNote!(note as unknown as Record<string, unknown>)),
+    updateNote: async (note) =>
+      callP1('updateNote', 'updateNote', () =>
+        apiClient!.updateNote!(note as unknown as Record<string, unknown>)),
+    deleteNote: async (id) =>
+      callP1('deleteNote', 'deleteNote', () => apiClient!.deleteNote!(id)),
+    listHabits: async (params) =>
+      callP1('listHabits', 'listHabits', () => apiClient!.listHabits!(params)),
+    getHabit: async (id) =>
+      callP1('getHabit', 'getHabit', () => apiClient!.getHabit!(id)),
+    createHabit: async (habit) =>
+      callP1('createHabit', 'createHabit', () =>
+        apiClient!.createHabit!(habit as unknown as Record<string, unknown>)),
+    updateHabit: async (habit) =>
+      callP1('updateHabit', 'updateHabit', () =>
+        apiClient!.updateHabit!(habit as unknown as Record<string, unknown>)),
+    deleteHabit: async (id) =>
+      callP1('deleteHabit', 'deleteHabit', () => apiClient!.deleteHabit!(id)),
+    completeHabit: async (progress) =>
+      callP1('createHabitDailyProgress', 'completeHabit', () =>
+        apiClient!.createHabitDailyProgress!(progress as unknown as Record<string, unknown>)),
   };
 }

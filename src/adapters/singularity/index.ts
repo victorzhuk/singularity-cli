@@ -8,4 +8,9 @@ export {
   type MoveTaskRequest,
   type CreateProjectRequest,
   type UpdateProjectRequest,
+  type CreateNoteRequest,
+  type UpdateNoteRequest,
+  type CreateHabitRequest,
+  type UpdateHabitRequest,
+  type CompleteHabitRequest,
 } from './adapter.js';
