@@ -22,6 +22,9 @@ export function validateEmoji(raw: string): string {
       { field: 'emoji' },
     );
   }
+  if (/^[0-9a-fA-F]{1,6}$/.test(raw)) {
+    return raw.toLowerCase();
+  }
   const cp = raw.codePointAt(0);
   if (cp === undefined) {
     throw new ValidationFailedError('emoji must be a non-empty character', { field: 'emoji' });
