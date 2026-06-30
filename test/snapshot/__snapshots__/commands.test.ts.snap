@@ -60,6 +60,36 @@ exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] 
     "outputSchema": "CommandMetadata",
   },
   {
+    "args": [
+      {
+        "description": "shell type: bash, zsh, or fish",
+        "name": "shell",
+        "required": true,
+      },
+    ],
+    "description": "generate shell completion scripts",
+    "errorCodes": [
+      "VALIDATION_FAILED",
+    ],
+    "examples": [
+      "singularity completion bash >> ~/.bash_completion",
+      "singularity completion zsh > ~/.zfunc/_singularity",
+      "singularity completion fish > ~/.config/fish/completions/singularity.fish",
+    ],
+    "name": "completion",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "print agent-oriented example invocations",
+    "errorCodes": [],
+    "examples": [
+      "singularity completion examples --json",
+    ],
+    "name": "completion examples",
+    "outputSchema": null,
+  },
+  {
     "args": [],
     "description": "initialize a .singularity-project.yml in the current directory",
     "errorCodes": [
@@ -348,6 +378,18 @@ exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] 
   },
   {
     "args": [],
+    "description": "search across tasks and projects (not yet available in current upstream)",
+    "errorCodes": [
+      "ADAPTER_UNAVAILABLE",
+    ],
+    "examples": [
+      "singularity search --query "my task" --json",
+    ],
+    "name": "search",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
     "description": "generate agent skill files for the Singularity API",
     "errorCodes": [
       "NOT_IMPLEMENTED",
@@ -361,6 +403,184 @@ exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] 
       "singularity skills --agent claude --with-commands --json",
     ],
     "name": "skills",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "create a new tag",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tags create --title "urgent" --json",
+      "singularity tags create --title "focus" --color blue --json",
+    ],
+    "name": "tags create",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "delete a tag",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIRMATION_REQUIRED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tags delete --id <id> --yes --json",
+      "singularity tags delete --id <id> --force --json",
+    ],
+    "name": "tags delete",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "get a tag by id",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tags get --id <id> --json",
+    ],
+    "name": "tags get",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "list tags",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tags list --json",
+    ],
+    "name": "tags list",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "update a tag",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tags update --id <id> --title "renamed" --json",
+    ],
+    "name": "tags update",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "create a new task group",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity task-groups create --title "Week 1" --project <id> --json",
+    ],
+    "name": "task-groups create",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "delete a task group",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIRMATION_REQUIRED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity task-groups delete --id <id> --yes --json",
+      "singularity task-groups delete --id <id> --force --json",
+    ],
+    "name": "task-groups delete",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "get a task group by id",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity task-groups get --id <id> --json",
+    ],
+    "name": "task-groups get",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "list task groups",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity task-groups list --json",
+      "singularity task-groups list --project <id> --json",
+    ],
+    "name": "task-groups list",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "update a task group",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity task-groups update --id <id> --title "Week 2" --json",
+    ],
+    "name": "task-groups update",
     "outputSchema": null,
   },
   {

@@ -25,6 +25,14 @@
     "pack:check": "npm pack --dry-run --json",
     "validate": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:adapter && openspec validate --all --strict --no-interactive && npm run pack:check"
   },
+  "exports": {
+    ".": "./dist/cli.js",
+    "./sdk": {
+      "types": "./dist/sdk/index.d.ts",
+      "default": "./dist/sdk/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist",
     "upstream/*.mcpb",

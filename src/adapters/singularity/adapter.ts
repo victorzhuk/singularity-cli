@@ -90,6 +90,29 @@ export interface CompleteHabitRequest {
   date?: string;
 }
 
+export interface CreateTagRequest {
+  title: string;
+  color?: string;
+}
+
+export interface UpdateTagRequest {
+  id: string;
+  title?: string;
+  color?: string;
+}
+
+export interface CreateTaskGroupRequest {
+  title: string;
+  projectId: string;
+  color?: string;
+}
+
+export interface UpdateTaskGroupRequest {
+  id: string;
+  title?: string;
+  color?: string;
+}
+
 export interface SingularityAdapterConfig {
   baseUrl: string;
   accessToken: string;
@@ -122,6 +145,18 @@ export interface SingularityAdapter {
   updateHabit(habit: UpdateHabitRequest): Promise<unknown>;
   deleteHabit(id: string): Promise<unknown>;
   completeHabit(progress: CompleteHabitRequest): Promise<unknown>;
+  // P1 — tags
+  listTags(params?: Record<string, unknown>): Promise<unknown>;
+  getTag(id: string): Promise<unknown>;
+  createTag(tag: CreateTagRequest): Promise<unknown>;
+  updateTag(tag: UpdateTagRequest): Promise<unknown>;
+  deleteTag(id: string): Promise<unknown>;
+  // P1 — task groups
+  listTaskGroups(params?: Record<string, unknown>): Promise<unknown>;
+  getTaskGroup(id: string): Promise<unknown>;
+  createTaskGroup(g: CreateTaskGroupRequest): Promise<unknown>;
+  updateTaskGroup(g: UpdateTaskGroupRequest): Promise<unknown>;
+  deleteTaskGroup(id: string): Promise<unknown>;
 }
 
 interface ApiClientInstance {
@@ -147,6 +182,16 @@ interface ApiClientInstance {
   updateHabit?(habit: Record<string, unknown>): Promise<unknown>;
   deleteHabit?(id: string): Promise<unknown>;
   createHabitDailyProgress?(progress: Record<string, unknown>): Promise<unknown>;
+  listTags?(params?: Record<string, unknown>): Promise<unknown>;
+  getTag?(id: string): Promise<unknown>;
+  createTag?(tag: Record<string, unknown>): Promise<unknown>;
+  updateTag?(tag: Record<string, unknown>): Promise<unknown>;
+  deleteTag?(id: string): Promise<unknown>;
+  listTaskGroups?(params?: Record<string, unknown>): Promise<unknown>;
+  getTaskGroup?(id: string): Promise<unknown>;
+  createTaskGroup?(g: Record<string, unknown>): Promise<unknown>;
+  updateTaskGroup?(g: Record<string, unknown>): Promise<unknown>;
+  deleteTaskGroup?(id: string): Promise<unknown>;
 }
 
 type ApiClientConstructor = new (config: {
@@ -398,5 +443,29 @@ export function createSingularityAdapter(
     completeHabit: async (progress) =>
       callP1('createHabitDailyProgress', 'completeHabit', () =>
         apiClient!.createHabitDailyProgress!(progress as unknown as Record<string, unknown>)),
+    listTags: async (params) =>
+      callP1('listTags', 'listTags', () => apiClient!.listTags!(params)),
+    getTag: async (id) =>
+      callP1('getTag', 'getTag', () => apiClient!.getTag!(id)),
+    createTag: async (tag) =>
+      callP1('createTag', 'createTag', () =>
+        apiClient!.createTag!(tag as unknown as Record<string, unknown>)),
+    updateTag: async (tag) =>
+      callP1('updateTag', 'updateTag', () =>
+        apiClient!.updateTag!(tag as unknown as Record<string, unknown>)),
+    deleteTag: async (id) =>
+      callP1('deleteTag', 'deleteTag', () => apiClient!.deleteTag!(id)),
+    listTaskGroups: async (params) =>
+      callP1('listTaskGroups', 'listTaskGroups', () => apiClient!.listTaskGroups!(params)),
+    getTaskGroup: async (id) =>
+      callP1('getTaskGroup', 'getTaskGroup', () => apiClient!.getTaskGroup!(id)),
+    createTaskGroup: async (g) =>
+      callP1('createTaskGroup', 'createTaskGroup', () =>
+        apiClient!.createTaskGroup!(g as unknown as Record<string, unknown>)),
+    updateTaskGroup: async (g) =>
+      callP1('updateTaskGroup', 'updateTaskGroup', () =>
+        apiClient!.updateTaskGroup!(g as unknown as Record<string, unknown>)),
+    deleteTaskGroup: async (id) =>
+      callP1('deleteTaskGroup', 'deleteTaskGroup', () => apiClient!.deleteTaskGroup!(id)),
   };
 }

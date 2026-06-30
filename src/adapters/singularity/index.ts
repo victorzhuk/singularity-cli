@@ -13,4 +13,8 @@ export {
   type CreateHabitRequest,
   type UpdateHabitRequest,
   type CompleteHabitRequest,
+  type CreateTagRequest,
+  type UpdateTagRequest,
+  type CreateTaskGroupRequest,
+  type UpdateTaskGroupRequest,
 } from './adapter.js';
