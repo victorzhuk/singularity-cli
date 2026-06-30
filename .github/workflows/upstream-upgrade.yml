@@ -1,0 +1,29 @@
+name: Upstream Upgrade
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_version:
+        description: Target version (semver)
+        required: false
+      upstream_url:
+        description: Direct download URL (overrides version)
+        required: false
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Run upstream upgrade
+        env:
+          UPSTREAM_URL: ${{ inputs.upstream_url }}
+          UPSTREAM_VERSION: ${{ inputs.upstream_version }}
+        run: node dist/cli.js upstream upgrade --to "${UPSTREAM_URL:-$UPSTREAM_VERSION}" --json
+      - run: npm run typecheck && npm run lint && npm test && npm run test:adapter && npm run upstream:verify

@@ -17,6 +17,7 @@
     "test": "vitest run",
     "test:snapshot": "vitest run test/snapshot",
     "test:coverage": "vitest run --coverage",
+    "test:smoke": "vitest run test/smoke",
     "upstream:verify": "node dist/cli.js upstream verify",
     "upstream:check": "node dist/cli.js upstream check",
     "upstream:upgrade": "node dist/cli.js upstream upgrade",

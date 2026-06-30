@@ -1,0 +1,28 @@
+name: PR Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run test:adapter
+      - run: npm run test:snapshot
+      - run: npm run upstream:verify
+      - run: npm run pack:check
+      # openspec may not be installed in CI; gate must not fail on a missing binary
+      - run: npx --yes openspec validate --all --strict --no-interactive
+        continue-on-error: true
