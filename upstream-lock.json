@@ -1,5 +1,17 @@
 {
   "adapterMap": {
+    "createProject": {
+      "method": "createProject",
+      "source": "ApiClient"
+    },
+    "createTask": {
+      "method": "createTask",
+      "source": "ApiClient"
+    },
+    "deleteTask": {
+      "method": "deleteTask",
+      "source": "ApiClient"
+    },
     "getProject": {
       "method": "getProject",
       "source": "ApiClient"
@@ -14,6 +26,14 @@
     },
     "listTasks": {
       "method": "listTasks",
+      "source": "ApiClient"
+    },
+    "updateProject": {
+      "method": "updateProject",
+      "source": "ApiClient"
+    },
+    "updateTask": {
+      "method": "updateTask",
       "source": "ApiClient"
     }
   },

@@ -1,6 +1,8 @@
 import path from 'node:path';
 import {
   AdapterUnavailableError,
+  AuthScopeDeniedError,
+  AuthTokenInvalidError,
   CliError,
   NetworkTimeoutError,
 } from '../../core/errors.js';
@@ -8,6 +10,54 @@ import { redact, registerSecret } from '../../core/redact.js';
 import { loadUpstreamRuntime } from '../../upstream/runtime.js';
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
+
+export interface CreateTaskRequest {
+  title: string;
+  projectId?: string;
+  priority?: number;
+  date?: string | null;
+  useTime?: boolean;
+  notify?: number;
+  alarmNotify?: boolean;
+  notifyMinutes?: number[];
+}
+
+export interface UpdateTaskRequest {
+  id: string;
+  title?: string;
+  projectId?: string;
+  priority?: number;
+  date?: string | null;
+  useTime?: boolean;
+  notify?: number;
+  alarmNotify?: boolean;
+  notifyMinutes?: number[];
+  status?: number | string;
+}
+
+export interface CompleteTaskRequest {
+  id: string;
+}
+
+export interface MoveTaskRequest {
+  id: string;
+  projectId: string;
+}
+
+export interface CreateProjectRequest {
+  name: string;
+  description?: string | null;
+  emoji?: string | null;
+  parentId?: string | null;
+}
+
+export interface UpdateProjectRequest {
+  id: string;
+  name?: string;
+  description?: string | null;
+  emoji?: string | null;
+  parentId?: string | null;
+}
 
 export interface SingularityAdapterConfig {
   baseUrl: string;
@@ -21,6 +71,14 @@ export interface SingularityAdapter {
   getTask(id: string): Promise<unknown>;
   listProjects(params?: Record<string, unknown>): Promise<unknown>;
   getProject(id: string): Promise<unknown>;
+  createTask(req: CreateTaskRequest): Promise<unknown>;
+  updateTask(req: UpdateTaskRequest): Promise<unknown>;
+  completeTask(req: CompleteTaskRequest): Promise<unknown>;
+  moveTask(req: MoveTaskRequest): Promise<unknown>;
+  deleteTask(id: string): Promise<unknown>;
+  createProject(req: CreateProjectRequest): Promise<unknown>;
+  updateProject(req: UpdateProjectRequest): Promise<unknown>;
+  authStatus(): Promise<unknown>;
 }
 
 interface ApiClientInstance {
@@ -29,6 +87,11 @@ interface ApiClientInstance {
   getTask(id: string): Promise<unknown>;
   listProjects(params?: Record<string, unknown>): Promise<unknown>;
   getProject(id: string): Promise<unknown>;
+  createTask(task: Record<string, unknown>): Promise<unknown>;
+  updateTask(task: Record<string, unknown>): Promise<unknown>;
+  deleteTask(id: string): Promise<unknown>;
+  createProject(project: Record<string, unknown>): Promise<unknown>;
+  updateProject(project: Record<string, unknown>): Promise<unknown>;
 }
 
 type ApiClientConstructor = new (config: {
@@ -108,12 +171,9 @@ function safeUpstreamMessage(err: unknown): string | undefined {
   return undefined;
 }
 
-function normalizeAdapterError(
-  err: unknown,
-  operation: string,
-): AdapterUnavailableError {
+function normalizeAdapterError(err: unknown, operation: string): CliError {
   if (err instanceof CliError) {
-    return err as AdapterUnavailableError;
+    return err;
   }
 
   const message = safeMessage(err);
@@ -127,9 +187,25 @@ function normalizeAdapterError(
     details.message = upstreamMessage;
   }
 
+  const redactedDetails = redact(details) as Record<string, unknown>;
+
+  if (status === 401) {
+    return new AuthTokenInvalidError(
+      `${operation} failed: ${message}`,
+      redactedDetails,
+    );
+  }
+
+  if (status === 403) {
+    return new AuthScopeDeniedError(
+      `${operation} failed: ${message}`,
+      redactedDetails,
+    );
+  }
+
   return new AdapterUnavailableError(
     `${operation} failed: ${message}`,
-    redact(details) as Record<string, unknown>,
+    redactedDetails,
   );
 }
 
@@ -173,14 +249,19 @@ export function createSingularityAdapter(
       baseUrl: config.baseUrl,
       enableLogging: config.enableLogging ?? false,
     });
-    instance.setAccessToken(config.accessToken);
     registerSecret(config.accessToken);
+    instance.setAccessToken(config.accessToken);
 
     for (const method of [
       'listTasks',
       'getTask',
       'listProjects',
       'getProject',
+      'createTask',
+      'updateTask',
+      'deleteTask',
+      'createProject',
+      'updateProject',
     ] as const) {
       if (typeof instance[method] !== 'function') {
         throw new AdapterUnavailableError('method not available', { method });
@@ -207,5 +288,21 @@ export function createSingularityAdapter(
       call('listProjects', () => apiClient!.listProjects(params)),
     getProject: async (id) =>
       call('getProject', () => apiClient!.getProject(id)),
+    createTask: async (req) =>
+      call('createTask', () => apiClient!.createTask(req as unknown as Record<string, unknown>)),
+    updateTask: async (req) =>
+      call('updateTask', () => apiClient!.updateTask(req as unknown as Record<string, unknown>)),
+    completeTask: async (req) =>
+      call('completeTask', () => apiClient!.updateTask({ id: req.id, status: 'done' })),
+    moveTask: async (req) =>
+      call('moveTask', () => apiClient!.updateTask({ id: req.id, projectId: req.projectId })),
+    deleteTask: async (id) =>
+      call('deleteTask', () => apiClient!.deleteTask(id)),
+    createProject: async (req) =>
+      call('createProject', () => apiClient!.createProject(req as unknown as Record<string, unknown>)),
+    updateProject: async (req) =>
+      call('updateProject', () => apiClient!.updateProject(req as unknown as Record<string, unknown>)),
+    authStatus: async () =>
+      call('authStatus', () => apiClient!.listProjects({ maxCount: 1 })),
   };
 }

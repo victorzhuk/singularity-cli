@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "id": "task-1",
+      "title": "First task",
+      "priority": 1,
+      "date": null,
+      "useTime": false,
+      "notify": 0,
+      "alarmNotify": false,
+      "notifyMinutes": [],
+      "modifiedDate": "",
+      "createdDate": "2026-06-29T12:00:00Z",
+      "status": "open",
+      "projectId": "project-1"
+    },
+    {
+      "id": "task-2",
+      "title": "Second task",
+      "priority": 1,
+      "date": null,
+      "useTime": false,
+      "notify": 0,
+      "alarmNotify": false,
+      "notifyMinutes": [],
+      "modifiedDate": "",
+      "createdDate": "2026-06-29T13:00:00Z",
+      "status": "done",
+      "projectId": "project-1"
+    }
+  ],
+  "total": 2
+}

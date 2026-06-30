@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "id": "project-1",
+      "name": "Alpha",
+      "description": "Alpha project",
+      "emoji": null,
+      "baseTaskGroupId": null
+    },
+    {
+      "id": "project-2",
+      "name": "Beta",
+      "description": "Beta project",
+      "emoji": null,
+      "baseTaskGroupId": null
+    }
+  ],
+  "total": 2
+}

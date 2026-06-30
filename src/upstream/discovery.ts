@@ -20,7 +20,17 @@ export interface DiscoveryResult {
 }
 
 const requiredFiles = ['client.js', 'server.js', 'modules/', 'utils/'];
-const adapterMethods = ['listTasks', 'getTask', 'listProjects', 'getProject'];
+const adapterMethods = [
+  'listTasks',
+  'getTask',
+  'listProjects',
+  'getProject',
+  'createTask',
+  'updateTask',
+  'deleteTask',
+  'createProject',
+  'updateProject',
+];
 
 async function assertRequiredFiles(extractedDir: string): Promise<void> {
   const missing: string[] = [];

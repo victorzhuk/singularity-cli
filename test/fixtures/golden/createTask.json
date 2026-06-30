@@ -1,0 +1,14 @@
+{
+  "id": "task-1",
+  "title": "My task",
+  "priority": 2,
+  "date": null,
+  "useTime": false,
+  "notify": 0,
+  "alarmNotify": false,
+  "notifyMinutes": [],
+  "modifiedDate": "2026-06-30T10:00:00Z",
+  "createdDate": "2026-06-30T10:00:00Z",
+  "status": "open",
+  "projectId": "project-1"
+}

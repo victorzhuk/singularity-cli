@@ -1,0 +1,12 @@
+{
+  "id": "project-3",
+  "name": "New Project",
+  "description": "A new project",
+  "emoji": "1f4cb",
+  "baseTaskGroupId": "tg-1",
+  "showInBasket": false,
+  "archivedAt": null,
+  "parentId": null,
+  "createdAt": "2026-06-30T10:00:00Z",
+  "updatedAt": "2026-06-30T10:00:00Z"
+}
