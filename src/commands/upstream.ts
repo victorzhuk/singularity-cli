@@ -1,7 +1,35 @@
 import { Command } from 'commander';
 import { NotImplementedError } from '../core/errors.js';
 import { sortKeys } from '../core/sortKeys.js';
+import type { CommandMeta } from '../schemas/index.js';
 import { verifyUpstreamRuntime } from '../upstream/runtime.js';
+
+export const upstreamMetadata: CommandMeta[] = [
+  {
+    name: 'upstream check',
+    description: 'check for upstream updates',
+    args: [],
+    examples: ['singularity upstream check --json'],
+    outputSchema: null,
+    errorCodes: ['UPSTREAM_SCHEMA_MISMATCH', 'UPSTREAM_BREAKING_CHANGE'],
+  },
+  {
+    name: 'upstream upgrade',
+    description: 'upgrade the upstream bundle',
+    args: [],
+    examples: ['singularity upstream upgrade --to 2.2.0'],
+    outputSchema: null,
+    errorCodes: ['UPSTREAM_BREAKING_CHANGE', 'UPSTREAM_SCHEMA_MISMATCH'],
+  },
+  {
+    name: 'upstream verify',
+    description: 'verify the bundled MCPB archive against the lockfile',
+    args: [],
+    examples: ['singularity upstream verify --json'],
+    outputSchema: null,
+    errorCodes: ['UPSTREAM_SCHEMA_MISMATCH', 'ADAPTER_UNAVAILABLE'],
+  },
+];
 
 function buildSortedModules(
   modules: Record<string, { functions: string[] }>,

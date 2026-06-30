@@ -5,25 +5,28 @@ import { NormalizedProjectSchema, ProjectListSchema } from './project.js';
 import { NormalizedTaskSchema, TaskListSchema } from './task.js';
 
 const VersionInfoSchema = z.object({
-  version: z.string(),
-  upstream: z.object({
-    sha256: z.string(),
-    version: z.string(),
-  }).optional(),
+  cliVersion: z.string(),
+  mcpbVersion: z.string(),
+  mcpbSha256: z.string(),
+  packageSourceUrl: z.string(),
+  nodeVersion: z.string(),
+  platform: z.string(),
 });
 
 const CommandMetadataSchema = z.object({
-  description: z.string(),
   name: z.string(),
-  options: z.array(z.object({
-    description: z.string().optional(),
-    flags: z.string(),
-  })).optional(),
-  subcommands: z.array(z.object({
-    description: z.string(),
+  description: z.string(),
+  args: z.array(z.object({
     name: z.string(),
-  })).optional(),
+    required: z.boolean(),
+    description: z.string(),
+  })),
+  examples: z.array(z.string()),
+  outputSchema: z.string().nullable(),
+  errorCodes: z.array(z.string()),
 });
+
+export type CommandMeta = z.infer<typeof CommandMetadataSchema>;
 
 export function allSchemas(): Record<string, unknown> {
   const entries: Array<[string, unknown]> = [

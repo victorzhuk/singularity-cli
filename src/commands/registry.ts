@@ -1,4 +1,14 @@
 import type { Command } from 'commander';
-import { createUpstreamCommand } from './upstream.js';
+import type { CommandMeta } from '../schemas/index.js';
+import { createMetaCommand, metaMetadata } from './meta.js';
+import { createUpstreamCommand, upstreamMetadata } from './upstream.js';
 
-export const commandRegistry: Array<() => Command> = [createUpstreamCommand];
+export const commandRegistry: Array<() => Command | Command[]> = [
+  createUpstreamCommand,
+  createMetaCommand,
+];
+
+export const commandMetadata: CommandMeta[] = [
+  ...upstreamMetadata,
+  ...metaMetadata,
+];

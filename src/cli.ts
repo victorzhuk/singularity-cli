@@ -21,7 +21,9 @@ program
   .option('--no-color', 'disable color output');
 
 for (const f of commandRegistry) {
-  program.addCommand(f());
+  const result = f();
+  const cmds = Array.isArray(result) ? result : [result];
+  for (const cmd of cmds) program.addCommand(cmd);
 }
 
 program.hook('preAction', (programCmd, actionCmd) => {
