@@ -1,0 +1,593 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`allSchemas snapshot > matches snapshot 1`] = `
+{
+  "CommandMetadata": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "args": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string",
+            },
+            "name": {
+              "type": "string",
+            },
+            "required": {
+              "type": "boolean",
+            },
+          },
+          "required": [
+            "name",
+            "required",
+            "description",
+          ],
+          "type": "object",
+        },
+        "type": "array",
+      },
+      "description": {
+        "type": "string",
+      },
+      "errorCodes": {
+        "items": {
+          "type": "string",
+        },
+        "type": "array",
+      },
+      "examples": {
+        "items": {
+          "type": "string",
+        },
+        "type": "array",
+      },
+      "name": {
+        "type": "string",
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+    },
+    "required": [
+      "name",
+      "description",
+      "args",
+      "examples",
+      "outputSchema",
+      "errorCodes",
+    ],
+    "type": "object",
+  },
+  "ConfigV1": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "defaultProfile": {
+        "type": "string",
+      },
+      "defaultProject": {
+        "type": "string",
+      },
+      "profiles": {
+        "additionalProperties": {
+          "additionalProperties": false,
+          "properties": {
+            "apiUrl": {
+              "type": "string",
+            },
+            "defaultBaseTaskGroupId": {
+              "type": "string",
+            },
+            "defaultProject": {
+              "type": "string",
+            },
+            "savedTokenRef": {
+              "type": "string",
+            },
+            "timezone": {
+              "type": "string",
+            },
+            "tokenEnv": {
+              "type": "string",
+            },
+          },
+          "type": "object",
+        },
+        "propertyNames": {
+          "type": "string",
+        },
+        "type": "object",
+      },
+      "projects": {
+        "additionalProperties": {
+          "additionalProperties": false,
+          "properties": {
+            "baseTaskGroupId": {
+              "type": "string",
+            },
+            "defaultPriority": {
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "type": "integer",
+            },
+            "id": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "id",
+          ],
+          "type": "object",
+        },
+        "propertyNames": {
+          "type": "string",
+        },
+        "type": "object",
+      },
+      "skills": {
+        "additionalProperties": false,
+        "properties": {
+          "claude": {
+            "additionalProperties": false,
+            "properties": {
+              "outputDir": {
+                "type": "string",
+              },
+            },
+            "type": "object",
+          },
+        },
+        "type": "object",
+      },
+      "version": {
+        "const": 1,
+        "type": "number",
+      },
+    },
+    "required": [
+      "version",
+      "profiles",
+      "projects",
+    ],
+    "type": "object",
+  },
+  "ErrorEnvelope": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "error": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "ADAPTER_UNAVAILABLE",
+              "AUTH_FAILED",
+              "AUTH_SCOPE_DENIED",
+              "AUTH_TOKEN_EXPIRED",
+              "AUTH_TOKEN_INVALID",
+              "AUTH_TOKEN_MISSING",
+              "BASE_TASK_GROUP_MISSING",
+              "CONFIRMATION_REQUIRED",
+              "CONFIG_INVALID",
+              "DELTA_INVALID",
+              "GENERATED_FILE_COLLISION",
+              "INTERNAL_ERROR",
+              "NETWORK_TIMEOUT",
+              "NOT_IMPLEMENTED",
+              "PROFILE_UNKNOWN",
+              "PROJECT_ALIAS_UNKNOWN",
+              "PROJECT_BINDING_MISSING",
+              "UNSUPPORTED_DRY_RUN",
+              "UPSTREAM_BREAKING_CHANGE",
+              "UPSTREAM_SCHEMA_MISMATCH",
+              "USAGE_ERROR",
+              "VALIDATION_FAILED",
+            ],
+            "type": "string",
+          },
+          "details": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string",
+            },
+            "type": "object",
+          },
+          "message": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "code",
+          "message",
+        ],
+        "type": "object",
+      },
+    },
+    "required": [
+      "error",
+    ],
+    "type": "object",
+  },
+  "NormalizedProject": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "archivedAt": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "baseTaskGroupId": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "description": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "emoji": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "id": {
+        "type": "string",
+      },
+      "name": {
+        "type": "string",
+      },
+      "parentId": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "showInBasket": {
+        "type": "boolean",
+      },
+      "title": {
+        "type": "string",
+      },
+    },
+    "required": [
+      "id",
+      "name",
+      "description",
+      "emoji",
+      "baseTaskGroupId",
+    ],
+    "type": "object",
+  },
+  "NormalizedTask": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "alarmNotify": {
+        "type": "boolean",
+      },
+      "createdDate": {
+        "type": "string",
+      },
+      "date": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "type": "null",
+          },
+        ],
+      },
+      "id": {
+        "type": "string",
+      },
+      "isNote": {
+        "type": "boolean",
+      },
+      "modifiedDate": {
+        "type": "string",
+      },
+      "notify": {
+        "maximum": 9007199254740991,
+        "minimum": -9007199254740991,
+        "type": "integer",
+      },
+      "notifyMinutes": {
+        "items": {
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "type": "integer",
+        },
+        "type": "array",
+      },
+      "priority": {
+        "maximum": 9007199254740991,
+        "minimum": -9007199254740991,
+        "type": "integer",
+      },
+      "projectId": {
+        "type": "string",
+      },
+      "status": {
+        "type": "string",
+      },
+      "title": {
+        "type": "string",
+      },
+      "useTime": {
+        "type": "boolean",
+      },
+    },
+    "required": [
+      "id",
+      "title",
+      "priority",
+      "date",
+      "useTime",
+      "notify",
+      "alarmNotify",
+      "notifyMinutes",
+      "modifiedDate",
+      "createdDate",
+      "status",
+      "projectId",
+    ],
+    "type": "object",
+  },
+  "ProjectList": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "archivedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "baseTaskGroupId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "description": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "emoji": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "id": {
+              "type": "string",
+            },
+            "name": {
+              "type": "string",
+            },
+            "parentId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "showInBasket": {
+              "type": "boolean",
+            },
+            "title": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "id",
+            "name",
+            "description",
+            "emoji",
+            "baseTaskGroupId",
+          ],
+          "type": "object",
+        },
+        "type": "array",
+      },
+      "total": {
+        "maximum": 9007199254740991,
+        "minimum": -9007199254740991,
+        "type": "integer",
+      },
+    },
+    "required": [
+      "items",
+    ],
+    "type": "object",
+  },
+  "TaskList": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "alarmNotify": {
+              "type": "boolean",
+            },
+            "createdDate": {
+              "type": "string",
+            },
+            "date": {
+              "anyOf": [
+                {
+                  "type": "string",
+                },
+                {
+                  "type": "null",
+                },
+              ],
+            },
+            "id": {
+              "type": "string",
+            },
+            "isNote": {
+              "type": "boolean",
+            },
+            "modifiedDate": {
+              "type": "string",
+            },
+            "notify": {
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "type": "integer",
+            },
+            "notifyMinutes": {
+              "items": {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer",
+              },
+              "type": "array",
+            },
+            "priority": {
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "type": "integer",
+            },
+            "projectId": {
+              "type": "string",
+            },
+            "status": {
+              "type": "string",
+            },
+            "title": {
+              "type": "string",
+            },
+            "useTime": {
+              "type": "boolean",
+            },
+          },
+          "required": [
+            "id",
+            "title",
+            "priority",
+            "date",
+            "useTime",
+            "notify",
+            "alarmNotify",
+            "notifyMinutes",
+            "modifiedDate",
+            "createdDate",
+            "status",
+            "projectId",
+          ],
+          "type": "object",
+        },
+        "type": "array",
+      },
+      "total": {
+        "maximum": 9007199254740991,
+        "minimum": -9007199254740991,
+        "type": "integer",
+      },
+    },
+    "required": [
+      "items",
+    ],
+    "type": "object",
+  },
+  "VersionInfo": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "cliVersion": {
+        "type": "string",
+      },
+      "mcpbSha256": {
+        "type": "string",
+      },
+      "mcpbVersion": {
+        "type": "string",
+      },
+      "nodeVersion": {
+        "type": "string",
+      },
+      "packageSourceUrl": {
+        "type": "string",
+      },
+      "platform": {
+        "type": "string",
+      },
+    },
+    "required": [
+      "cliVersion",
+      "mcpbVersion",
+      "mcpbSha256",
+      "packageSourceUrl",
+      "nodeVersion",
+      "platform",
+    ],
+    "type": "object",
+  },
+}
+`;

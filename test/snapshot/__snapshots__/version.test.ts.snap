@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`version payload > stable fields match snapshot 1`] = `
+{
+  "cliVersion": "0.1.0",
+  "mcpbSha256": "adc127b3ac093073dda150f6bc6e4dac401df1836c8ca4b4e0455ed0ce93210d",
+  "mcpbVersion": "2.1.1",
+  "packageSourceUrl": "https://me.singularity-app.com/download/singularity-mcp-server-2.1.1.mcpb",
+}
+`;

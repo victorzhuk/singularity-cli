@@ -1,0 +1,100 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`P0 output normalization snapshots > VALIDATION_FAILED error envelope snapshot 1`] = `
+{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "details": {
+      "fields": [
+        "title",
+      ],
+    },
+    "message": "title required",
+  },
+}
+`;
+
+exports[`P0 output normalization snapshots > projects list snapshot 1`] = `
+{
+  "items": [
+    {
+      "baseTaskGroupId": null,
+      "description": "Alpha project",
+      "emoji": null,
+      "id": "project-1",
+      "name": "Alpha",
+    },
+    {
+      "baseTaskGroupId": null,
+      "description": "Beta project",
+      "emoji": null,
+      "id": "project-2",
+      "name": "Beta",
+    },
+  ],
+  "total": 2,
+}
+`;
+
+exports[`P0 output normalization snapshots > single project snapshot 1`] = `
+{
+  "baseTaskGroupId": null,
+  "description": "Alpha project",
+  "emoji": null,
+  "id": "project-1",
+  "name": "Alpha",
+}
+`;
+
+exports[`P0 output normalization snapshots > single task snapshot 1`] = `
+{
+  "alarmNotify": false,
+  "createdDate": "2026-06-29T12:00:00Z",
+  "date": null,
+  "id": "task-1",
+  "modifiedDate": "2026-06-29T12:00:00Z",
+  "notify": 0,
+  "notifyMinutes": [],
+  "priority": 1,
+  "projectId": "project-1",
+  "status": "open",
+  "title": "First task",
+  "useTime": false,
+}
+`;
+
+exports[`P0 output normalization snapshots > tasks list snapshot 1`] = `
+{
+  "items": [
+    {
+      "alarmNotify": false,
+      "createdDate": "2026-06-29T12:00:00Z",
+      "date": null,
+      "id": "task-1",
+      "modifiedDate": "",
+      "notify": 0,
+      "notifyMinutes": [],
+      "priority": 1,
+      "projectId": "project-1",
+      "status": "open",
+      "title": "First task",
+      "useTime": false,
+    },
+    {
+      "alarmNotify": false,
+      "createdDate": "2026-06-29T13:00:00Z",
+      "date": null,
+      "id": "task-2",
+      "modifiedDate": "",
+      "notify": 0,
+      "notifyMinutes": [],
+      "priority": 1,
+      "projectId": "project-1",
+      "status": "done",
+      "title": "Second task",
+      "useTime": false,
+    },
+  ],
+  "total": 2,
+}
+`;

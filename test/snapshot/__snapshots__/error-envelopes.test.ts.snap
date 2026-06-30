@@ -1,0 +1,184 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`error envelope snapshots > all 22 envelopes match snapshot 1`] = `
+{
+  "ADAPTER_UNAVAILABLE": {
+    "error": {
+      "code": "ADAPTER_UNAVAILABLE",
+      "message": "adapter not loaded",
+    },
+  },
+  "AUTH_FAILED": {
+    "error": {
+      "code": "AUTH_FAILED",
+      "message": "authentication failed",
+    },
+  },
+  "AUTH_SCOPE_DENIED": {
+    "error": {
+      "code": "AUTH_SCOPE_DENIED",
+      "message": "scope denied",
+    },
+  },
+  "AUTH_TOKEN_EXPIRED": {
+    "error": {
+      "code": "AUTH_TOKEN_EXPIRED",
+      "message": "token expired",
+    },
+  },
+  "AUTH_TOKEN_INVALID": {
+    "error": {
+      "code": "AUTH_TOKEN_INVALID",
+      "message": "token invalid",
+    },
+  },
+  "AUTH_TOKEN_MISSING": {
+    "error": {
+      "code": "AUTH_TOKEN_MISSING",
+      "message": "no token provided",
+    },
+  },
+  "BASE_TASK_GROUP_MISSING": {
+    "error": {
+      "code": "BASE_TASK_GROUP_MISSING",
+      "details": {
+        "project": "proj-1",
+      },
+      "message": "base task group missing",
+    },
+  },
+  "CONFIG_INVALID": {
+    "error": {
+      "code": "CONFIG_INVALID",
+      "details": {
+        "path": "/path/to/config.yml",
+      },
+      "message": "config parse error",
+    },
+  },
+  "CONFIRMATION_REQUIRED": {
+    "error": {
+      "code": "CONFIRMATION_REQUIRED",
+      "details": {
+        "flag": "--yes",
+      },
+      "message": "confirmation required",
+    },
+  },
+  "DELTA_INVALID": {
+    "error": {
+      "code": "DELTA_INVALID",
+      "message": "final op must end with \\n",
+    },
+  },
+  "GENERATED_FILE_COLLISION": {
+    "error": {
+      "code": "GENERATED_FILE_COLLISION",
+      "details": {
+        "path": "SKILL.md",
+      },
+      "message": "file already exists",
+    },
+  },
+  "INTERNAL_ERROR": {
+    "error": {
+      "code": "INTERNAL_ERROR",
+      "message": "unexpected error",
+    },
+  },
+  "NETWORK_TIMEOUT": {
+    "error": {
+      "code": "NETWORK_TIMEOUT",
+      "details": {
+        "operation": "listTasks",
+        "timeoutMs": 5000,
+      },
+      "message": "operation timed out after 5000ms",
+    },
+  },
+  "NOT_IMPLEMENTED": {
+    "error": {
+      "code": "NOT_IMPLEMENTED",
+      "details": {
+        "command": "tasks complete",
+      },
+      "message": "tasks complete is not implemented",
+    },
+  },
+  "PROFILE_UNKNOWN": {
+    "error": {
+      "code": "PROFILE_UNKNOWN",
+      "details": {
+        "knownProfiles": [
+          "default",
+        ],
+      },
+      "message": "unknown profile: prod",
+    },
+  },
+  "PROJECT_ALIAS_UNKNOWN": {
+    "error": {
+      "code": "PROJECT_ALIAS_UNKNOWN",
+      "details": {
+        "knownAliases": [
+          "bar",
+          "baz",
+        ],
+      },
+      "message": "unknown alias: foo",
+    },
+  },
+  "PROJECT_BINDING_MISSING": {
+    "error": {
+      "code": "PROJECT_BINDING_MISSING",
+      "message": "no project configured",
+    },
+  },
+  "UNSUPPORTED_DRY_RUN": {
+    "error": {
+      "code": "UNSUPPORTED_DRY_RUN",
+      "message": "dry-run not supported for delete",
+    },
+  },
+  "UPSTREAM_BREAKING_CHANGE": {
+    "error": {
+      "code": "UPSTREAM_BREAKING_CHANGE",
+      "details": {
+        "missing": [
+          "createTask",
+        ],
+      },
+      "message": "required method missing",
+    },
+  },
+  "UPSTREAM_SCHEMA_MISMATCH": {
+    "error": {
+      "code": "UPSTREAM_SCHEMA_MISMATCH",
+      "details": {
+        "command": "tasks get",
+        "missingFields": [
+          "id",
+        ],
+      },
+      "message": "id field missing",
+    },
+  },
+  "USAGE_ERROR": {
+    "error": {
+      "code": "USAGE_ERROR",
+      "message": "unknown option: --nope",
+    },
+  },
+  "VALIDATION_FAILED": {
+    "error": {
+      "code": "VALIDATION_FAILED",
+      "details": {
+        "fields": [
+          "title",
+        ],
+      },
+      "message": "title required",
+    },
+  },
+}
+`;

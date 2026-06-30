@@ -1,0 +1,367 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] = `
+[
+  {
+    "args": [],
+    "description": "validate token and optionally persist it to the local secrets store",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "AUTH_SCOPE_DENIED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity auth login --save-token --json",
+    ],
+    "name": "auth login",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "remove the saved token for the active profile",
+    "errorCodes": [
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity auth logout --json",
+    ],
+    "name": "auth logout",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "verify token validity against the API",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_TOKEN_EXPIRED",
+      "AUTH_FAILED",
+      "AUTH_SCOPE_DENIED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity auth status --json",
+    ],
+    "name": "auth status",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "list all available commands and their metadata",
+    "errorCodes": [],
+    "examples": [
+      "singularity commands --json",
+    ],
+    "name": "commands",
+    "outputSchema": "CommandMetadata",
+  },
+  {
+    "args": [],
+    "description": "initialize a .singularity-project.yml in the current directory",
+    "errorCodes": [
+      "VALIDATION_FAILED",
+    ],
+    "examples": [
+      "singularity config init --json --project myproj",
+    ],
+    "name": "config init",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "validate local config and report token availability",
+    "errorCodes": [
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity config validate --json",
+    ],
+    "name": "config validate",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "create a new project",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity projects create --title "My Project" --json",
+      "singularity projects create --title "My Project" --emoji 🚀 --dry-run --json",
+    ],
+    "name": "projects create",
+    "outputSchema": "NormalizedProject",
+  },
+  {
+    "args": [],
+    "description": "get a project by id",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity projects get --id <id> --json",
+    ],
+    "name": "projects get",
+    "outputSchema": "NormalizedProject",
+  },
+  {
+    "args": [],
+    "description": "list projects",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity projects list --json",
+      "singularity projects list --archived --json",
+    ],
+    "name": "projects list",
+    "outputSchema": "ProjectList",
+  },
+  {
+    "args": [],
+    "description": "update a project",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity projects update --id <id> --title "New Title" --json",
+      "singularity projects update --id <id> --archive --json",
+    ],
+    "name": "projects update",
+    "outputSchema": "NormalizedProject",
+  },
+  {
+    "args": [],
+    "description": "print JSON Schema definitions for all output types",
+    "errorCodes": [],
+    "examples": [
+      "singularity schemas --json",
+    ],
+    "name": "schemas",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "generate agent skill files for the Singularity API",
+    "errorCodes": [
+      "NOT_IMPLEMENTED",
+      "GENERATED_FILE_COLLISION",
+      "VALIDATION_FAILED",
+    ],
+    "examples": [
+      "singularity skills --agent claude --json",
+      "singularity skills --agent claude --output-dir .claude --json",
+      "singularity skills --agent claude --check --json",
+      "singularity skills --agent claude --with-commands --json",
+    ],
+    "name": "skills",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "complete a task",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks complete --id <id> --json",
+    ],
+    "name": "tasks complete",
+    "outputSchema": "NormalizedTask",
+  },
+  {
+    "args": [],
+    "description": "create a new task",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "BASE_TASK_GROUP_MISSING",
+      "PROJECT_BINDING_MISSING",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks create --title "My Task" --project myproject --task-group g1 --json",
+      "singularity tasks create --title "My Task" --date 2026-07-01 --dry-run --json",
+    ],
+    "name": "tasks create",
+    "outputSchema": "NormalizedTask",
+  },
+  {
+    "args": [],
+    "description": "delete a task",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIRMATION_REQUIRED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks delete --id <id> --yes --json",
+      "singularity tasks delete --id <id> --force --json",
+    ],
+    "name": "tasks delete",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "get a task by id",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks get --id <id> --json",
+    ],
+    "name": "tasks get",
+    "outputSchema": "NormalizedTask",
+  },
+  {
+    "args": [],
+    "description": "list tasks",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks list --json",
+      "singularity tasks list --project myproject --status open --json",
+    ],
+    "name": "tasks list",
+    "outputSchema": "TaskList",
+  },
+  {
+    "args": [],
+    "description": "move a task to another project",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "PROJECT_ALIAS_UNKNOWN",
+      "PROJECT_BINDING_MISSING",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks move --id <id> --project <dest-alias> --json",
+    ],
+    "name": "tasks move",
+    "outputSchema": "NormalizedTask",
+  },
+  {
+    "args": [],
+    "description": "update a task",
+    "errorCodes": [
+      "AUTH_TOKEN_MISSING",
+      "AUTH_TOKEN_INVALID",
+      "AUTH_FAILED",
+      "ADAPTER_UNAVAILABLE",
+      "VALIDATION_FAILED",
+      "CONFIG_INVALID",
+      "PROFILE_UNKNOWN",
+    ],
+    "examples": [
+      "singularity tasks update --id <id> --title "New Title" --json",
+      "singularity tasks update --id <id> --status done --json",
+    ],
+    "name": "tasks update",
+    "outputSchema": "NormalizedTask",
+  },
+  {
+    "args": [],
+    "description": "check for upstream updates",
+    "errorCodes": [
+      "UPSTREAM_SCHEMA_MISMATCH",
+    ],
+    "examples": [
+      "singularity upstream check --json",
+    ],
+    "name": "upstream check",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "upgrade the upstream bundle",
+    "errorCodes": [
+      "UPSTREAM_BREAKING_CHANGE",
+      "UPSTREAM_SCHEMA_MISMATCH",
+      "USAGE_ERROR",
+    ],
+    "examples": [
+      "singularity upstream upgrade --to 2.2.0",
+    ],
+    "name": "upstream upgrade",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "verify the bundled MCPB archive against the lockfile",
+    "errorCodes": [
+      "UPSTREAM_SCHEMA_MISMATCH",
+      "ADAPTER_UNAVAILABLE",
+    ],
+    "examples": [
+      "singularity upstream verify --json",
+    ],
+    "name": "upstream verify",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "print CLI and upstream MCPB version information",
+    "errorCodes": [],
+    "examples": [
+      "singularity version --json",
+    ],
+    "name": "version",
+    "outputSchema": "VersionInfo",
+  },
+]
+`;
