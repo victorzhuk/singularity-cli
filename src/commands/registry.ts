@@ -4,6 +4,7 @@ import { createAuthCommand, authMetadata } from './auth.js';
 import { createConfigCommand, configMetadata } from './config.js';
 import { createMetaCommand, metaMetadata } from './meta.js';
 import { createProjectsCommand, projectsMetadata } from './projects.js';
+import { createTasksCommand, tasksMetadata } from './tasks.js';
 import { createUpstreamCommand, upstreamMetadata } from './upstream.js';
 
 export const commandRegistry: Array<() => Command | Command[]> = [
@@ -12,6 +13,7 @@ export const commandRegistry: Array<() => Command | Command[]> = [
   createConfigCommand,
   createAuthCommand,
   createProjectsCommand,
+  createTasksCommand,
 ];
 
 export const commandMetadata: CommandMeta[] = [
@@ -20,4 +22,5 @@ export const commandMetadata: CommandMeta[] = [
   ...configMetadata,
   ...authMetadata,
   ...projectsMetadata,
+  ...tasksMetadata,
 ];
