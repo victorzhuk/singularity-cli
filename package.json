@@ -15,6 +15,8 @@
     "lint": "eslint src test scripts eslint.config.mjs",
     "pretest": "npm run build",
     "test": "vitest run",
+    "test:snapshot": "vitest run test/snapshot",
+    "test:coverage": "vitest run --coverage",
     "upstream:verify": "node dist/cli.js upstream verify",
     "upstream:check": "node dist/cli.js upstream check",
     "upstream:upgrade": "node dist/cli.js upstream upgrade",
@@ -29,11 +31,14 @@
   ],
   "dependencies": {
     "commander": "^15.0.0",
-    "extract-zip": "^2.0.1"
+    "extract-zip": "^2.0.1",
+    "yaml": "^2",
+    "zod": "^4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^10.6.0",
     "nock": "^14.0.16",
     "typescript": "^6.0.3",

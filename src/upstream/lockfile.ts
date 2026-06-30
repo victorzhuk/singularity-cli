@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { UpstreamSchemaMismatchError } from '../core/errors.js';
+import { sortKeys } from '../core/sortKeys.js';
 import { lockfilePath } from './paths.js';
 
 export interface UpstreamLock {
@@ -13,22 +14,6 @@ export interface UpstreamLock {
     modules: Record<string, { functions: string[] }>;
   };
   adapterMap: Record<string, { source: string; method: string }>;
-}
-
-function sortKeys(value: unknown): unknown {
-  if (Array.isArray(value)) {
-    return value.map(sortKeys);
-  }
-
-  if (value !== null && typeof value === 'object') {
-    const sorted: Record<string, unknown> = {};
-    for (const key of Object.keys(value).sort((a, b) => a.localeCompare(b))) {
-      sorted[key] = sortKeys((value as Record<string, unknown>)[key]);
-    }
-    return sorted;
-  }
-
-  return value;
 }
 
 export function writeLockfile(lock: UpstreamLock): Promise<void> {
