@@ -81,6 +81,7 @@ async function discoverModules(
 export async function discoverUpstream(
   extractedDir: string,
   sha256: string,
+  version: string,
 ): Promise<DiscoveryResult> {
   await assertRequiredFiles(extractedDir);
 
@@ -118,7 +119,7 @@ export async function discoverUpstream(
   }
 
   return {
-    version: '2.1.1',
+    version,
     sha256,
     requiredFiles: [...requiredFiles],
     client: { functions: clientFunctions },

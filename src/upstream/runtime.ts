@@ -118,6 +118,7 @@ async function isCacheComplete(
 export async function extractAndDiscover(
   archive: string,
   sha256: string,
+  version: string,
   tempParent: string = tmpdir(),
 ): Promise<{ tempDir: string; discovery: DiscoveryResult }> {
   const tempDir = await mkdtemp(
@@ -125,7 +126,7 @@ export async function extractAndDiscover(
   );
   try {
     await extractArchive(archive, tempDir);
-    const discovery = await discoverUpstream(tempDir, sha256);
+    const discovery = await discoverUpstream(tempDir, sha256, version);
     return { tempDir, discovery };
   } catch (err) {
     await rm(tempDir, { recursive: true, force: true });
@@ -147,13 +148,14 @@ export async function loadUpstreamRuntime(
     return {
       runtimePath: keyDir,
       lock,
-      discovery: await discoverUpstream(keyDir, sha256),
+      discovery: await discoverUpstream(keyDir, sha256, lock.version),
     };
   }
 
   const { tempDir, discovery } = await extractAndDiscover(
     opts.archivePath,
     sha256,
+    lock.version,
     opts.cacheDir,
   );
 
@@ -165,7 +167,7 @@ export async function loadUpstreamRuntime(
         return {
           runtimePath: keyDir,
           lock,
-          discovery: await discoverUpstream(keyDir, sha256),
+          discovery: await discoverUpstream(keyDir, sha256, lock.version),
         };
       }
       await rm(keyDir, { recursive: true, force: true });
@@ -188,6 +190,7 @@ export async function verifyUpstreamRuntime(
   const { tempDir, discovery } = await extractAndDiscover(
     opts.archivePath,
     sha256,
+    lock.version,
   );
   await rm(tempDir, { recursive: true, force: true });
 
