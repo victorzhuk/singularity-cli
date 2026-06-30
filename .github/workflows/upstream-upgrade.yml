@@ -26,4 +26,4 @@ jobs:
           UPSTREAM_URL: ${{ inputs.upstream_url }}
           UPSTREAM_VERSION: ${{ inputs.upstream_version }}
         run: node dist/cli.js upstream upgrade --to "${UPSTREAM_URL:-$UPSTREAM_VERSION}" --json
-      - run: npm run typecheck && npm run lint && npm test && npm run test:adapter && npm run upstream:verify
+      - run: npm run typecheck && npm run lint && npm test && npm run test:adapter && npm run test:snapshot && npm run upstream:verify

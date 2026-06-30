@@ -2,7 +2,7 @@ import type { Command } from 'commander';
 import type { CommandMeta } from '../schemas/index.js';
 import { createAuthCommand, authMetadata } from './auth.js';
 import { createCompletionCommand, completionMetadata } from './completion.js';
-import { createConfigCommand, configMetadata } from './config.js';
+import { createConfigCommand, configMetadata, createInitCommand, initMetadata } from './config.js';
 import { createHabitsCommand, habitsMetadata } from './habits.js';
 import { createMetaCommand, metaMetadata } from './meta.js';
 import { createNotesCommand, notesMetadata } from './notes.js';
@@ -17,6 +17,7 @@ import { createUpstreamCommand, upstreamMetadata } from './upstream.js';
 export const commandRegistry: Array<() => Command | Command[]> = [
   createUpstreamCommand,
   createMetaCommand,
+  createInitCommand,
   createConfigCommand,
   createAuthCommand,
   createProjectsCommand,
@@ -33,6 +34,7 @@ export const commandRegistry: Array<() => Command | Command[]> = [
 export const commandMetadata: CommandMeta[] = [
   ...upstreamMetadata,
   ...metaMetadata,
+  ...initMetadata,
   ...configMetadata,
   ...authMetadata,
   ...projectsMetadata,

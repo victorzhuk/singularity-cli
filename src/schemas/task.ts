@@ -14,6 +14,7 @@ export const NormalizedTaskSchema = z.object({
   status: z.string(),
   projectId: z.string(),
   isNote: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 export type NormalizedTask = z.infer<typeof NormalizedTaskSchema>;

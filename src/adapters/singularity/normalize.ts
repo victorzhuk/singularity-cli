@@ -31,6 +31,10 @@ export function normalizeTask(raw: unknown, command: string): NormalizedTask {
     obj.isNote = r.isNote;
   }
 
+  if (Array.isArray(r.tags) && r.tags.length > 0) {
+    obj.tags = r.tags as string[];
+  }
+
   return NormalizedTaskSchema.parse(obj);
 }
 

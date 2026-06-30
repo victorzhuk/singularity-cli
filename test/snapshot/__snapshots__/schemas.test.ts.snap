@@ -347,6 +347,12 @@ exports[`allSchemas snapshot > matches snapshot 1`] = `
       "status": {
         "type": "string",
       },
+      "tags": {
+        "items": {
+          "type": "string",
+        },
+        "type": "array",
+      },
       "title": {
         "type": "string",
       },
@@ -519,6 +525,12 @@ exports[`allSchemas snapshot > matches snapshot 1`] = `
             },
             "status": {
               "type": "string",
+            },
+            "tags": {
+              "items": {
+                "type": "string",
+              },
+              "type": "array",
             },
             "title": {
               "type": "string",

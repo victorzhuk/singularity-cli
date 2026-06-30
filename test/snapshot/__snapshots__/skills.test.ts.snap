@@ -74,7 +74,8 @@ unless the user explicitly requests a different value.
 
 ## Habit colors
 
-Habit color is a hex color string (e.g. \`#ff6b6b\`). Pass the value exactly as provided;
-do not transform or normalize. Omit the field entirely when not specified.
+Habit color must be one of the 10 named values: red, orange, yellow, green, teal, blue, purple, pink, brown, gray.
+Pass the name exactly as listed (e.g. \`blue\`, \`red\`). Any other value raises \`VALIDATION_FAILED\`.
+Omit the field entirely when not specified.
 "
 `;

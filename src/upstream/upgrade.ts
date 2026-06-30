@@ -7,7 +7,7 @@ export function resolveTargetUrl(to: string, currentSourceUrl: string): string {
   if (to.startsWith('http://') || to.startsWith('https://')) {
     return to;
   }
-  return currentSourceUrl.replace(/\d+\.\d+\.\d+/, to);
+  return currentSourceUrl.replace(/\d+\.\d+\.\d+/g, to);
 }
 
 export async function downloadArchive(

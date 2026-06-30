@@ -217,7 +217,7 @@ function timeoutPromise<T>(
   });
 }
 
-async function safeMessage(err: unknown): Promise<string> {
+function safeMessage(err: unknown): string {
   if (err instanceof Error) {
     return String(redact(err.message));
   }

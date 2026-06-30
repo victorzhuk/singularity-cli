@@ -12,7 +12,7 @@ const REQUIRED_KEYWORDS = [
   'priority',
   'isNote',
   'status: 0',
-  '#ff6b6b',
+  'red, orange, yellow, green, teal, blue, purple, pink, brown, gray',
 ];
 
 describe('renderSkill', () => {

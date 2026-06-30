@@ -27,8 +27,10 @@ function readSecrets(): Record<string, string> {
 
 function writeSecrets(store: Record<string, string>): void {
   const p = secretsFilePath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  fs.writeFileSync(p, JSON.stringify(store, null, 2), { mode: 0o600 });
+  fs.mkdirSync(path.dirname(p), { recursive: true, mode: 0o700 });
+  const tmp = `${p}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(store, null, 2), { mode: 0o600 });
+  fs.renameSync(tmp, p);
 }
 
 export function hasSavedToken(profileName: string): boolean {

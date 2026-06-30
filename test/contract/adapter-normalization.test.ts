@@ -30,6 +30,10 @@ describe('normalizeProjectList', () => {
   it('null → empty list', () => {
     expect(normalizeProjectList(null, 'projects list')).toEqual({ items: [] });
   });
+
+  it('[] → empty list', () => {
+    expect(normalizeProjectList([], 'projects list')).toEqual({ items: [] });
+  });
 });
 
 describe('normalizeTask', () => {

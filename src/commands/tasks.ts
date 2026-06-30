@@ -10,7 +10,7 @@ import {
 import { contextFromCommand } from '../core/context.js';
 import type { ExecutionContext } from '../core/context.js';
 import { BaseTaskGroupMissingError, ValidationFailedError } from '../core/errors.js';
-import { requireConfirmation } from '../core/guards.js';
+import { assertDryRunSupported, requireConfirmation } from '../core/guards.js';
 import { buildNotifyMinutes } from '../core/validators.js';
 import {
   createSingularityAdapter,
@@ -75,6 +75,9 @@ export function buildTaskDate(input: string, timezone: string): { date: string; 
   const datePart = input.slice(0, sepIdx);
   const timePart = input.slice(sepIdx + 1);
   const timeNorm = timePart.split(':').length === 2 ? `${timePart}:00` : timePart;
+  if (timeNorm.endsWith('Z') || /[+-]\d{2}:\d{2}$/.test(timeNorm)) {
+    return { date: `${datePart}T${timeNorm}`, useTime: true };
+  }
   const offset = parseTimezoneOffset(timezone);
   return { date: `${datePart}T${timeNorm}${offset}`, useTime: true };
 }
@@ -326,12 +329,13 @@ export function createTasksCommand(): Command {
         accessToken: token,
         requestTimeoutMs: ctx.timeoutMs,
       });
-      const { status, dateFrom, dateTo, limit, search } = listCmd.opts() as {
+      const { status, dateFrom, dateTo, limit, search, tag } = listCmd.opts() as {
         status?: string;
         dateFrom?: string;
         dateTo?: string;
         limit?: string;
         search?: string;
+        tag?: string[];
       };
       const projectId = ctx.project ? resolveProjectId(ctx, cfg, profile) : undefined;
       const params: Record<string, unknown> = {};
@@ -345,6 +349,9 @@ export function createTasksCommand(): Command {
       if (search) {
         const q = search.toLowerCase();
         result = { ...result, items: result.items.filter(t => t.title.toLowerCase().includes(q)) };
+      }
+      if (tag && tag.length > 0) {
+        result = { ...result, items: result.items.filter(t => tag.some(tg => (t.tags ?? []).includes(tg))) };
       }
       output(ctx, result, () => {
         outputTable(
@@ -534,9 +541,11 @@ export function createTasksCommand(): Command {
   const completeCmd = new Command('complete')
     .description('complete a task')
     .requiredOption('--id <id>', 'task id')
+    .option('--dry-run', 'not supported; always fails')
     .option('--json', 'output JSON')
     .action(async () => {
       const ctx = contextFromCommand(completeCmd);
+      if (ctx.dryRun) assertDryRunSupported(false);
       const cfg = loadResolvedConfig(ctx);
       const { name: profileName, profile } = resolveProfile(ctx, cfg);
       const apiUrl = resolveApiUrl(ctx, profile);
@@ -559,9 +568,11 @@ export function createTasksCommand(): Command {
     .requiredOption('--id <id>', 'task id')
     .option('--yes', 'skip confirmation')
     .option('--force', 'force in JSON mode')
+    .option('--dry-run', 'not supported; always fails')
     .option('--json', 'output JSON')
     .action(async () => {
       const ctx = contextFromCommand(deleteCmd);
+      if (ctx.dryRun) assertDryRunSupported(false);
       const { id, yes, force } = deleteCmd.opts() as { id: string; yes?: boolean; force?: boolean };
       requireConfirmation(ctx, { yes, force });
       const cfg = loadResolvedConfig(ctx);

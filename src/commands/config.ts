@@ -50,15 +50,90 @@ export const configMetadata: CommandMeta[] = [
     outputSchema: null,
     errorCodes: ['CONFIG_INVALID', 'PROFILE_UNKNOWN'],
   },
+];
+
+export const initMetadata: CommandMeta[] = [
   {
-    name: 'config init',
+    name: 'init',
     description: 'initialize a .singularity-project.yml in the current directory',
     args: [],
-    examples: ['singularity config init --json --project myproj'],
+    examples: ['singularity init --json --project myproj'],
     outputSchema: null,
     errorCodes: ['VALIDATION_FAILED'],
   },
 ];
+
+export function createInitCommand(): Command {
+  const init = new Command('init')
+    .description('initialize a .singularity-project.yml in the current directory')
+    .option('--json', 'output JSON')
+    .option('--profile <name>', 'profile name', 'default')
+    .option('--token-env <VAR>', 'env var name holding the refresh token', 'SINGULARITY_REFRESH_TOKEN')
+    .option('--timezone <tz>', 'timezone for the profile', 'GMT+0')
+    .option('--api-url <url>', 'API base URL to record in the profile')
+    .option('--force', 'overwrite existing config')
+    .action(async () => {
+      const ctx = contextFromCommand(init);
+      const opts = init.opts() as {
+        profile: string;
+        tokenEnv: string;
+        timezone: string;
+        apiUrl?: string;
+        force?: boolean;
+      };
+
+      // --project, --profile, --api-url are also global options so they arrive via ctx
+      let project = ctx.project ?? '';
+      const profileName = ctx.profile ?? opts.profile;
+      const apiUrl = ctx.apiUrl ?? opts.apiUrl;
+
+      if (!project.trim()) {
+        if (ctx.json) {
+          throw new ValidationFailedError('--project is required in JSON mode', { field: 'project' });
+        }
+        const { createInterface } = await import('node:readline/promises');
+        const rl = createInterface({ input: process.stdin, output: process.stderr });
+        try {
+          project = await rl.question('Project id or alias: ');
+        } finally {
+          rl.close();
+        }
+        if (!project.trim()) {
+          throw new ValidationFailedError('project is required', { field: 'project' });
+        }
+      }
+
+      const destPath = path.join(ctx.cwd, '.singularity-project.yml');
+
+      if (fs.existsSync(destPath) && !opts.force) {
+        throw new ValidationFailedError('config already exists; use --force to overwrite', { path: destPath });
+      }
+
+      const cfg = buildInitConfig({
+        project: project.trim(),
+        profile: profileName,
+        tokenEnv: opts.tokenEnv,
+        timezone: opts.timezone,
+        apiUrl,
+      });
+
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+      fs.writeFileSync(destPath, yamlStringify(cfg), 'utf8');
+
+      const result = {
+        created: true,
+        path: destPath,
+        profile: profileName,
+        project: project.trim(),
+        version: 1,
+      };
+
+      output(ctx, result, () => {
+        outputSummary(ctx, `created ${destPath}`);
+      });
+    });
+  return init;
+}
 
 export function createConfigCommand(): Command {
   const config = new Command('config').description('manage local project config');
@@ -148,77 +223,7 @@ export function createConfigCommand(): Command {
       });
     });
 
-  const init = new Command('init')
-    .description('initialize a .singularity-project.yml in the current directory')
-    .option('--json', 'output JSON')
-    .option('--profile <name>', 'profile name', 'default')
-    .option('--token-env <VAR>', 'env var name holding the refresh token', 'SINGULARITY_REFRESH_TOKEN')
-    .option('--timezone <tz>', 'timezone for the profile', 'GMT+0')
-    .option('--api-url <url>', 'API base URL to record in the profile')
-    .option('--force', 'overwrite existing config')
-    .action(async () => {
-      const ctx = contextFromCommand(init);
-      const opts = init.opts() as {
-        profile: string;
-        tokenEnv: string;
-        timezone: string;
-        apiUrl?: string;
-        force?: boolean;
-      };
-
-      // --project, --profile, --api-url are also global options so they arrive via ctx
-      let project = ctx.project ?? '';
-      const profileName = ctx.profile ?? opts.profile;
-      const apiUrl = ctx.apiUrl ?? opts.apiUrl;
-
-      if (!project.trim()) {
-        if (ctx.json) {
-          throw new ValidationFailedError('--project is required in JSON mode', { field: 'project' });
-        }
-        const { createInterface } = await import('node:readline/promises');
-        const rl = createInterface({ input: process.stdin, output: process.stderr });
-        try {
-          project = await rl.question('Project id or alias: ');
-        } finally {
-          rl.close();
-        }
-        if (!project.trim()) {
-          throw new ValidationFailedError('project is required', { field: 'project' });
-        }
-      }
-
-      const destPath = path.join(ctx.cwd, '.singularity-project.yml');
-
-      if (fs.existsSync(destPath) && !opts.force) {
-        throw new ValidationFailedError('config already exists; use --force to overwrite', { path: destPath });
-      }
-
-      const cfg = buildInitConfig({
-        project: project.trim(),
-        profile: profileName,
-        tokenEnv: opts.tokenEnv,
-        timezone: opts.timezone,
-        apiUrl,
-      });
-
-      fs.mkdirSync(path.dirname(destPath), { recursive: true });
-      fs.writeFileSync(destPath, yamlStringify(cfg), 'utf8');
-
-      const result = {
-        created: true,
-        path: destPath,
-        profile: profileName,
-        project: project.trim(),
-        version: 1,
-      };
-
-      output(ctx, result, () => {
-        outputSummary(ctx, `created ${destPath}`);
-      });
-    });
-
   config.addCommand(validate);
-  config.addCommand(init);
 
   return config;
 }

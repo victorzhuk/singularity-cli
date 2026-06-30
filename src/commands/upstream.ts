@@ -62,7 +62,13 @@ function versionFromTarget(to: string, resolvedUrl: string): string {
     return to;
   }
   const m = resolvedUrl.match(/(\d+\.\d+\.\d+)/);
-  return m ? m[1] : to;
+  if (m) return m[1];
+  try {
+    const u = new URL(resolvedUrl);
+    return path.basename(u.pathname).replace(/[:/\\]/g, '_') || 'unknown';
+  } catch {
+    return resolvedUrl.replace(/^https?:\/\//, '').replace(/[:/\\]/g, '_') || 'unknown';
+  }
 }
 
 export function createUpstreamCommand(): Command {
@@ -200,12 +206,14 @@ export function createUpstreamCommand(): Command {
           discovery,
         );
 
-        await rename(tmpArchive, archPath);
+        const tmpLockPath = `${lockPath}.tmp`;
         await writeFile(
-          lockPath,
+          tmpLockPath,
           JSON.stringify(sortKeys(newLock), null, 2) + '\n',
           'utf8',
         );
+        await rename(tmpArchive, archPath);
+        await rename(tmpLockPath, lockPath);
 
         const nextSteps = [
           'npm run upstream:verify',
@@ -233,6 +241,7 @@ export function createUpstreamCommand(): Command {
         }
       } catch (err) {
         await rm(tmpArchive, { force: true });
+        await rm(`${lockPath}.tmp`, { force: true });
         if (tempExtractDir) {
           await rm(tempExtractDir, { recursive: true, force: true });
         }

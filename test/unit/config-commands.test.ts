@@ -243,7 +243,7 @@ describe('config validate (CLI)', () => {
   });
 });
 
-describe('config init (CLI)', () => {
+describe('init (CLI)', () => {
   let tempDir: string;
 
   beforeEach(() => {
@@ -256,7 +256,7 @@ describe('config init (CLI)', () => {
 
   it('--json without --project → VALIDATION_FAILED, no file written', async () => {
     const result = await runCli(
-      ['config', 'init', '--json', '--cwd', tempDir],
+      ['init', '--json', '--cwd', tempDir],
     );
 
     expect(result.exitCode).not.toBe(0);
@@ -267,7 +267,7 @@ describe('config init (CLI)', () => {
 
   it('--json --project myproj → writes valid config with defaults', async () => {
     const result = await runCli(
-      ['config', 'init', '--json', '--project', 'myproj', '--cwd', tempDir],
+      ['init', '--json', '--project', 'myproj', '--cwd', tempDir],
     );
 
     expect(result.exitCode).toBe(0);
@@ -297,10 +297,10 @@ describe('config init (CLI)', () => {
   });
 
   it('second run without --force → VALIDATION_FAILED', async () => {
-    await runCli(['config', 'init', '--json', '--project', 'myproj', '--cwd', tempDir]);
+    await runCli(['init', '--json', '--project', 'myproj', '--cwd', tempDir]);
 
     const result = await runCli(
-      ['config', 'init', '--json', '--project', 'myproj', '--cwd', tempDir],
+      ['init', '--json', '--project', 'myproj', '--cwd', tempDir],
     );
 
     expect(result.exitCode).not.toBe(0);
@@ -308,10 +308,10 @@ describe('config init (CLI)', () => {
   });
 
   it('second run with --force → succeeds', async () => {
-    await runCli(['config', 'init', '--json', '--project', 'p1', '--cwd', tempDir]);
+    await runCli(['init', '--json', '--project', 'p1', '--cwd', tempDir]);
 
     const result = await runCli(
-      ['config', 'init', '--json', '--project', 'p2', '--force', '--cwd', tempDir],
+      ['init', '--json', '--project', 'p2', '--force', '--cwd', tempDir],
     );
 
     expect(result.exitCode).toBe(0);
@@ -322,7 +322,7 @@ describe('config init (CLI)', () => {
 
   it('custom flags are recorded in the file', async () => {
     const result = await runCli([
-      'config', 'init', '--json',
+      'init', '--json',
       '--project', 'proj',
       '--profile', 'staging',
       '--token-env', 'MY_TOKEN',

@@ -91,18 +91,6 @@ exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] 
   },
   {
     "args": [],
-    "description": "initialize a .singularity-project.yml in the current directory",
-    "errorCodes": [
-      "VALIDATION_FAILED",
-    ],
-    "examples": [
-      "singularity config init --json --project myproj",
-    ],
-    "name": "config init",
-    "outputSchema": null,
-  },
-  {
-    "args": [],
     "description": "validate local config and report token availability",
     "errorCodes": [
       "CONFIG_INVALID",
@@ -201,6 +189,18 @@ exports[`commandMetadata snapshot > sorted commandMetadata matches snapshot 1`] 
       "singularity habits update --id <id> --color green --json",
     ],
     "name": "habits update",
+    "outputSchema": null,
+  },
+  {
+    "args": [],
+    "description": "initialize a .singularity-project.yml in the current directory",
+    "errorCodes": [
+      "VALIDATION_FAILED",
+    ],
+    "examples": [
+      "singularity init --json --project myproj",
+    ],
+    "name": "init",
     "outputSchema": null,
   },
   {

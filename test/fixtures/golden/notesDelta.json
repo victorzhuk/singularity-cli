@@ -1,0 +1,11 @@
+{
+  "id": "note-1",
+  "title": "My Note",
+  "projectId": "project-1",
+  "content": [
+    {"insert": "First line\n"},
+    {"insert": "Second line\n"}
+  ],
+  "createdAt": "2026-06-30T10:00:00Z",
+  "updatedAt": "2026-06-30T10:00:00Z"
+}
