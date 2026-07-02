@@ -1,7 +1,12 @@
 {
-  "name": "@victorzhuk/singularity-cli",
-  "version": "0.2.0",
+  "name": "@zhuk/singularity-cli",
+  "version": "0.3.0",
   "description": "CLI for the Singularity API",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorzhuk/singularity-cli.git"
+  },
   "engines": {
     "node": ">=22"
   },
@@ -36,7 +41,9 @@
   "files": [
     "dist",
     "upstream/*.mcpb",
-    "upstream-lock.json"
+    "upstream-lock.json",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "dependencies": {
     "commander": "^15.0.0",
@@ -53,5 +60,9 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.62.1",
     "vitest": "^4.1.9"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
